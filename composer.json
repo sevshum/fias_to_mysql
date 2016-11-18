@@ -1,0 +1,12 @@
+{
+  "require": {
+    "php":">=5.3.0",
+    "monolog/monolog":"*"
+  },
+  "autoload": {
+    "psr-4": {"B3\\": "classes/"},
+    "classmap": [
+      "library/dbf2mysql.php"
+    ]
+  }
+}

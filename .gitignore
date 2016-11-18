@@ -1,0 +1,20 @@
+# phpstorm project files
+.idea
+
+# composer vendor dir
+/vendor
+
+# composer itself is not needed
+composer.phar
+
+# windows thumbnail cache
+Thumbs.db
+
+# Mac DS_Store Files
+.DS_Store
+
+output/*
+!output/.gitkeep
+
+runtime/*
+!runtime/.gitkeep
