@@ -21,6 +21,16 @@ class DbfConverter
     const LOG_NAME = 'DBF_CONVERTER';
     const LOG_PATH = '../runtime/app.log';
 
+    const MAX_INSERT_LINES = 5000;
+
+    const DNORDOC_TABLE = 'DNORDOC';
+    //just in case. This field is memo dbf field. It saved in DNORDOC.DBT. dbase extension does not work with memo
+//    const DNORDOC_MEMO_FIELD = 'DOCNAME';
+    const LANDMARK_TABLE = 'LANDMARK';
+    //just in case. This field is memo dbf field. It saved in LANDMARK.DBT. dbase extension does not work with memo
+//    const LANDMARK_MEMO_FIELD = 'LOCATION'; //just in case
+
+
     protected $archiveDBF = "";
     //name of file without extension
     protected $name	= "";
@@ -111,7 +121,7 @@ class DbfConverter
             /* verify that the file exists */
             if (is_file($this->archiveDBF) && is_readable($this->archiveDBF)) {
                 /* If everything is Ok we open the file to work on */
-                $this->archiveDBF = dbase_open($this->archiveDBF,0);
+                $this->archiveDBF = dbase_open($this->archiveDBF, 0);
                 /* get the number of fields */
                 $this->fieldsCount = dbase_numfields($this->archiveDBF);
                 /* get the number of records */
@@ -221,9 +231,16 @@ class DbfConverter
         $this->insertLine = "INSERT IGNORE INTO `" . $this->changedTableName . "` (" . $this->removeSpaceFromLine($this->fieldNamesStr) . ") VALUES ";
         $this->addToOutput($this->insertLine);
         /* walk the records */
+        $itCount = 0;
         for ($i = 1; $i <= $this->recordsCount; $i++) {
-            /*create the INSERT line. We use IGNORE to avoid duplicate record problems */
-            $this->insertLine = " (Null,";
+            if ($itCount >= self::MAX_INSERT_LINES) {
+                $this->insertLine = "INSERT IGNORE INTO `" . $this->changedTableName . "` (" . $this->removeSpaceFromLine($this->fieldNamesStr) . ") VALUES ";
+                $this->insertLine .= " (Null,";
+                $itCount = 0;
+            } else {
+                /*create the INSERT line. We use IGNORE to avoid duplicate record problems */
+                $this->insertLine = " (Null,";
+            }
 
             if (!$this->getRecord($i)) {
                 return false;
@@ -236,15 +253,25 @@ class DbfConverter
                 /*  add the field to the INSERT line */
                 $this->addItem($j);
             }
-            $this->insertLine = $this->removeSpaceFromLine($this->insertLine);
-            $this->insertLine .= "),";
-            $this->addToOutput($this->insertLine);
-        }
-        $this->insertLine = $this->removeSpaceFromLine($this->insertLine);
-        /*  finish the INSERT line*/
-        $this->insertLine .= ");";
+            if ($itCount >= self::MAX_INSERT_LINES - 1) {
+                $this->insertLine = $this->removeSpaceFromLine($this->insertLine);
+                $this->insertLine .= ");";
+            } else {
+                $this->insertLine = $this->removeSpaceFromLine($this->insertLine);
+                $this->insertLine .= "),";
+            }
 
-        $this->addToOutput($this->insertLine);
+            if ($i === $this->recordsCount) {
+                $this->insertLine = $this->removeSpaceFromLine($this->insertLine);
+                /*  finish the INSERT line*/
+                $this->insertLine .= ");";
+            }
+            $this->addToOutput($this->insertLine);
+            $itCount++;
+        }
+
+
+//        $this->addToOutput($this->insertLine);
         return true;
     }
 
@@ -279,7 +306,7 @@ class DbfConverter
                 /* convert apostrophes, accents and backslashes */
 
                 $encoding = mb_detect_encoding($this->record[$index], array('cp866'));
-                $this->record[$index] = iconv($encoding,'UTF-8//TRANSLIT',$this->record[$index]);
+                $this->record[$index] = iconv($encoding,'UTF-8//TRANSLIT//IGNORE',$this->record[$index]);
                 $this->record[$index] = str_replace("'","&apos;",$this->record[$index]);
                 $this->record[$index] = str_replace("\"","&quot;",$this->record[$index]);
                 $this->record[$index] = str_replace("`","&#096;",$this->record[$index]);
@@ -348,6 +375,14 @@ class DbfConverter
             echo $message;
             return false;
         }
+
+        if($this->tableName === self::DNORDOC_TABLE) {
+//            unset($this->record['deleted']);
+            array_splice($this->record, 1, 0, '');
+        } elseif($this->tableName === self::LANDMARK_TABLE) {
+//            unset($this->record['deleted']);
+            array_splice($this->record, 5, 0, '');
+        }
         return true;
     }
 
@@ -405,6 +440,10 @@ class DbfConverter
             $this->fieldNamesStr .= "$fieldName, ";
         }
         $table .= ");";
+//        var_dump($this->fieldsCount);
+//        var_dump($this->fieldsTitiles);
+//        var_dump($table);
+
         $this->addToOutput($table);
         return true;
     }

@@ -37,6 +37,34 @@ return [
                 'DIVTYPE' => 'house_division_type',
             ],
         ],
+        'DHOUSE' => [
+            'name' => 'deleted_house',
+            'rowsArray' => [
+                'POSTALCODE' => 'deleted_house_postal_code',
+                'IFNSFL' => 'deleted_house_ifns_fiz_li',
+                'TERRIFNSFL' => 'deleted_house_terr_ifns_fiz_li',
+                'IFNSUL' => 'deleted_house_ifns_ur_li',
+                'TERRIFNSUL' => 'deleted_house_terr_ifns_ur_li',
+                'OKATO' => 'deleted_house_okato',
+                'OKTMO' => 'deleted_house_oktmo',
+                'UPDATEDATE' => 'deleted_house_updatedate',
+                'HOUSENUM' => 'deleted_house_house_num',
+                'ESTSTATUS' => 'deleted_house_estate_status',
+                'BUILDNUM' => 'deleted_house_building_number',
+                'STRUCNUM' => 'deleted_house_struct_num',
+                'STRSTATUS' => 'deleted_house_strstatus',
+                'HOUSEID' => 'deleted_house_house_id',
+                'HOUSEGUID' => 'deleted_house_house_guid',
+                'AOGUID' => 'deleted_house_ao_guid',
+                'STARTDATE' => 'deleted_house_startdate',
+                'ENDDATE' => 'deleted_house_enddate',
+                'STATSTATUS' => 'deleted_house_stat_status',
+                'NORMDOC' => 'deleted_house_normdoc',
+                'COUNTER' => 'deleted_house_counter',
+                'CADNUM' => 'deleted_house_cadastr_num',
+                'DIVTYPE' => 'deleted_house_division_type',
+            ],
+        ],
         'HOUSEINT' => [
             'name' => 'house_interval',
             'rowsArray' => [
@@ -58,6 +86,29 @@ return [
                 'UPDATEDATE' => 'house_interval_updatedate',
                 'NORMDOC' => 'house_interval_normdoc',
                 'COUNTER' => 'house_interval_counter',
+            ],
+        ],
+        'DHOUSINT' => [
+            'name' => 'deleted_house_interval',
+            'rowsArray' => [
+                'AOGUID' => 'deleted_house_interval_ao_guid',
+                'ENDDATE' => 'deleted_house_interval_enddate',
+                'INTGUID' => 'deleted_house_interval_int_guid',
+                'HOUSEINTID' => 'deleted_house_interval_houseint_guid',
+                'IFNSFL' => 'deleted_house_interval_ifns_fiz_li',
+                'IFNSUL' => 'deleted_house_interval_ifns_ur_li',
+                'INTEND' => 'deleted_house_interval_interval_end',
+                'INTSTART' => 'deleted_house_interval_interval_start',
+                'INTSTATUS' => 'deleted_house_interval_interval_status',
+                'OKATO' => 'deleted_house_interval_okato',
+                'OKTMO' => 'deleted_house_interval_oktmo',
+                'POSTALCODE' => 'deleted_house_interval_postal_code',
+                'STARTDATE' => 'deleted_house_interval_startdate',
+                'TERRIFNSFL' => 'deleted_house_interval_terr_ifns_fiz_li',
+                'TERRIFNSUL' => 'deleted_house_interval_terr_ifns_ur_li',
+                'UPDATEDATE' => 'deleted_house_interval_updatedate',
+                'NORMDOC' => 'deleted_house_interval_normdoc',
+                'COUNTER' => 'deleted_house_interval_counter',
             ],
         ],
         'ADDROBJ' => [
@@ -124,7 +175,7 @@ return [
                 'NORMDOC' => 'landmark_normdoc',
             ]
         ],
-        'NORMDOC' => [
+        'NORDOC' => [ //check
             'name' => 'norm_doc',
             'rowsArray' => [
                 'DOCNAME' => 'norm_doc_doc_name',
@@ -134,36 +185,176 @@ return [
                 'DOCIMGID' => 'norm_doc_doc_imgid'
             ]
         ],
-        'HSTSTAT' => [
-            'name' => 'house_status',
+        'DNORDOC' => [
+            'name' => 'donorm_doc',
             'rowsArray' => [
-                'NAME' => 'house_status_name',
+                'DOCDATE' => 'dnorm_doc_doc_date',
+                'DOCNAME' => 'dnorm_doc_doc_name',
+                'DOCNUM' => 'dnorm_doc_doc_num',
+                'DOCTYPE' => 'dnorm_doc_doc_type',
+                'DOCIMGID' => 'dnorm_doc_doc_imgid',
+                'NORMDOCID' => 'dnorm_doc_normdoc_id',
+            ]
+        ],
+        'HSTSTAT' => [
+            'name' => 'house_state_status',
+            'rowsArray' => [
+                'HOUSESTID' => 'house_state_status_housest_id',
+                'NAME' => 'house_state_status_name',
+            ]
+        ],
+        'NDOCTYPE' => [
+            'name' => 'norm_doc_type',
+            'rowsArray' => [
+                'NDTYPEID' => 'norm_doc_type_ndtype_id',
+                'NAME' => 'norm_doc_type_name',
+            ]
+        ],
+        'INTVSTAT' => [
+            'name' => 'interval_status',
+            'rowsArray' => [
+                'INTVSTATID' => 'interval_status_intvstat_id',
+                'NAME' => 'interval_status_name',
             ]
         ],
         'CURENTST' => [
             'name' => 'current_status',
             'rowsArray' => [
-                'NAME' => 'house_status_name',
+                'CURENTSTID' => 'current_status_cuentst_id',
+                'NAME' => 'current_status_name',
+            ]
+        ],
+        'ACTSTAT' => [
+            'name' => 'active_status',
+            'rowsArray' => [
+                'ACTSTATID' => 'active_status_actstat_id',
+                'NAME' => 'active_status_name',
+            ]
+        ],
+        'ESTSTAT' => [
+            'name' => 'estate_status',
+            'rowsArray' => [
+                'ESTSTATID' => 'estate_status_eststat_id',
+                'NAME' => 'estate_status_name',
+                'SHORTNAME' => 'estate_status_shortname',
+            ]
+        ],
+        'CENTERST' => [
+            'name' => 'center_status',
+            'rowsArray' => [
+                'CENTERSTID' => 'center_status_centerst_id',
+                'NAME' => 'center_status_name',
+            ]
+        ],
+        'STRSTAT' => [
+            'name' => 'structure_status',
+            'rowsArray' => [
+                'STRSTATID' => 'structure_status_strstat_id',
+                'NAME' => 'structure_status_name',
+                'SHORTNAME' => 'structure_status_shortname',
+            ]
+        ],
+        'SOCRBASE' => [
+            'name' => 'address_object_type',
+            'rowsArray' => [
+                'LEVEL' => 'address_object_type_level',
+                'SCNAME' => 'address_object_type_shortname',
+                'SOCRNAME' => 'address_object_type_fullname',
+                'KOD_T_ST' => 'address_object_type_kod_t_st',
+            ]
+        ],
+        'DADDROBJ' => [
+            'name' => 'deleted_address_objecrs',
+            'rowsArray' => [
+                'ACTSTATUS' => 'deleted_address_objecrs_active_status',
+                'AOGUID' => 'deleted_address_objecrs_gu_id',
+                'AOID' => 'deleted_address_objecrs_ao_id',
+                'AOLEVEL' => 'deleted_address_objecrs_ao_level',
+                'AREACODE' => 'deleted_address_objecrs_area_code',
+                'AUTOCODE' => 'deleted_address_objecrs_auto_code',
+                'CENTSTATUS' => 'deleted_address_object_center_status',
+                'CITYCODE' => 'deleted_address_object_city_code',
+                'CODE' => 'deleted_address_object_code',
+                'CURRSTATUS' => 'deleted_address_object_curr_status',
+                'ENDDATE' => 'deleted_address_object_enddate',
+                'FORMALNAME' => 'deleted_address_object_formal_name',
+                'IFNSFL' => 'deleted_address_object_ifns_fiz_li',
+                'IFNSUL' => 'deleted_address_object_ifns_ur_li',
+                'NEXTID' => 'deleted_address_object_next_id',
+                'OFFNAME' => 'deleted_address_object_official_name',
+                'OKATO' => 'deleted_address_object_okato',
+                'OKTMO' => 'deleted_address_object_oktmo',
+                'OPERSTATUS' => 'deleted_address_object_operation_status',
+                'PARENTGUID' => 'deleted_address_object_parent_guid',
+                'PLACECODE' => 'deleted_address_object_place_code',
+                'PLAINCODE' => 'deleted_address_object_plain_code',
+                'POSTALCODE' => 'deleted_address_object_postal_code',
+                'PREVID' => 'deleted_address_object_prev_id',
+                'REGIONCODE' => 'deleted_address_object_region_code',
+                'SHORTNAME' => 'deleted_address_object_type_shortname',
+                'STARTDATE' => 'deleted_address_object_start_date',
+                'STREETCODE' => 'deleted_address_object_street_code',
+                'TERRIFNSFL' => 'deleted_address_object_terr_ifns_fiz_li',
+                'TERRIFNSUL' => 'deleted_address_object_terr_ifns_ur_li',
+                'UPDATEDATE' => 'deleted_address_object_updatedate',
+                'CTARCODE' => 'deleted_address_object_ctar_code',
+                'EXTRCODE' => 'deleted_address_object_extr_code',
+                'SEXTCODE' => 'deleted_address_object_sext_code',
+                'LIVESTATUS' => 'deleted_address_object_livestatus',
+                'NORMDOC' => 'deleted_address_object_normdoc',
+
             ]
         ],
         'ROOM' => [
             'name' => 'room',
             'rowsArray' => [
-                'ROOMGUID' => '',
-                'HOUSEGUID' => '',
-                'REGIONCODE' => '',
-                'FLATNUMBER' => '',
-                'FLATTYPE' => '',
-                'ROOMNUMBER' => '',
-                'ROOMTYPEID' => '',
-                'POSTALCODE' => '',
-                'UPDATEDATE' => '',
-                'PREVID' => '',
-                'NEXTID' => '',
-                'STARTDATE' => '',
-                'ENDDATE' => '',
-                'NORMDOC' => '',
-                'CADNUM' => ''
+                'ROOMID' => 'room_room_id',
+                'ROOMGUID' => 'room_gu_id',
+                'HOUSEGUID' => 'room_house_id',
+                'REGIONCODE' => 'room_region_code',
+                'FLATNUMBER' => 'room_flat_number',
+                'FLATTYPE' => 'room_flat_type',
+                'ROOMNUMBER' => 'room_number',
+                'ROOMTYPE' => 'room_type_id',
+                'POSTALCODE' => 'room_postal_code',
+                'UPDATEDATE' => 'room_update_date',
+                'PREVID' => 'room_prev_id',
+                'NEXTID' => 'room_next_id',
+                'STARTDATE' => 'room_start_date',
+                'OPERSTATUS' => 'room_oper_status',
+                'LIVESTATUS' => 'room_live_status',
+                'ENDDATE' => 'room_end_date',
+                'NORMDOC' => 'room_norm_doc',
+                'ROOMCADNUM' => 'room_room_cadastr_num',
+                'CADNUM' => 'room_cadastr_num'
+            ]
+        ],
+        'STEAD' => [
+            'name' => 'stead',
+            'rowsArray' => [
+                'STEADGUID' => 'stear_gu_id',
+                'NUMBER' => 'stear_number',
+                'REGIONCODE' => 'stead_region_code',
+                'POSTALCODE' => 'stead_postal_code',
+                'IFNSFL' => 'stead_ifns_fiz_li',
+                'IFNSUL' => 'stead_ifns_ur_li',
+                'TERRIFNSFL' => 'stead_terr_ifns_fiz_li',
+                'TERRIFNSUL' => 'stead_terr_ifns_ur_li',
+                'OKATO' => 'stead_okato',
+                'OKTMO' => 'stead_oktmo',
+                'UPDATEDATE' => 'stead_update_date',
+                'PARENTGUID' => 'stead_parent_gu_id',
+                'STEADID' => 'stead_stead_id',
+                'PREVID' => 'stead_prev_id',
+                'NEXTID' => 'stead_next_id',
+                'OPERSTATUS' => 'stead_oper_status',
+                'STARTDATE' => 'stead_start_date',
+                'ENDDATE' => 'stead_end_date',
+                'NORMDOC' => 'stead_norm_doc',
+                'LIVESTATUS' => 'stead_live_status',
+                'CADNUM' => 'stead_cadastr_num',
+                'COUNTER' => 'stead_counter',
+                'DIVTYPE' => 'stead_division_type',
             ]
         ]
     ]
