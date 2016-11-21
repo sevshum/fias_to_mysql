@@ -89,7 +89,7 @@ class DbfConverter
         $this->fileName = $toDir . $this->name . ".sql";
         /* If the file already exists - exit */
         if (is_file($this->fileName)) {
-            $message = "Another file with the name '" . $this->fileName . "' already exists in the current directory\n";
+            $message = "Another file with the name '" . realpath($this->fileName) . "' already exists in the current directory\n";
             $this->log->error($message);
             echo $message;
             exit;
@@ -101,7 +101,7 @@ class DbfConverter
             }
 
             fclose($file);
-            $message = "The file was stored in the '". $this->fileName ."'\n";
+            $message = "The file was stored in the '". realpath($this->fileName) ."'\n";
             $this->log->info($message);
             echo $message;
         } else {
