@@ -68,7 +68,7 @@ class Fias
 //            $this->_convertPartXml($file, self::TABLE_XML_HOUSE);
 //            $this->_convertPartXml($file, self::TABLE_XML_HOUSEINT, 11);
 //            $this->_convertPartXml($file, self::TABLE_XML_STEAD);
-//            $this->_convertPartXml($file, self::TABLE_XML_ACTSTAT);
+            $this->_convertPartXml($file, self::TABLE_XML_ACTSTAT);
 //            $this->_convertPartXml($file, self::TABLE_XML_ADDROBJ);
 //            $this->_convertPartXml($file, self::TABLE_XML_DADDROBJ, 15);
 //            $this->_convertPartXml($file, self::TABLE_XML_CENTERST);
@@ -84,7 +84,7 @@ class Fias
 //            $this->_convertPartXml($file, self::TABLE_XML_OPERSTATE);
 //            $this->_convertPartXml($file, self::TABLE_XML_SOCRBASE);
 //            $this->_convertPartXml($file, self::TABLE_XML_STRSTAT);
-            $this->_convertPartXml($file, self::TABLE_XML_NORDOC);
+//            $this->_convertPartXml($file, self::TABLE_XML_NORDOC);
         }
 
     }
