@@ -499,10 +499,7 @@ return [
             'name' => 'actual_statuses',
             'pk_id' => false,
             'del_where_col' => false,
-            'rowsArray' => [
-                'ACTSTATID' => 'active_status_id',
-                'NAME' => 'active_status_name',
-            ]
+            'rowsArray' => $actstat
         ],
         'AS_ESTSTAT' => [
             'name' => 'estate_status',
