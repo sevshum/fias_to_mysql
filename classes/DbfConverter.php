@@ -86,7 +86,12 @@ class DbfConverter
 
     protected function saveToFile($toDir)
     {
-        $this->fileName = $toDir . $this->name . ".sql";
+        if ($this->tablesArray[$this->tableName]['del_where_col']) {
+            $this->fileName = $toDir . 'delete/' . $this->name . "DEL.sql";
+        } else {
+            $this->fileName = $toDir . $this->name . ".sql";
+        }
+
         /* If the file already exists - exit */
         if (is_file($this->fileName)) {
             $message = "Another file with the name '" . realpath($this->fileName) . "' already exists in the current directory\n";
@@ -128,8 +133,12 @@ class DbfConverter
                 $this->recordsCount = dbase_numrecords($this->archiveDBF);
                 /* get the titles of the fields */
                 $this->fieldsTitiles = dbase_get_header_info($this->archiveDBF);
+                if ($this->tablesArray[$this->tableName]['del_where_col']) {
+                    return $this->convert2SqlDel();
+                } else {
+                    return $this->convert2Sql();
+                }
 
-                return $this->convert2Sql();
             } else {
                 $message = "The file '" . $this->name . "' does not exist or does not have read permissions\n";
                 $this->log->error($message);
@@ -167,6 +176,23 @@ class DbfConverter
         }
 
         if (!$this->createRecords()) {
+            return false;
+        }
+
+        /* close the DBF file */
+        if (!$this->closeDbf()) {
+            return false;
+        }
+
+        $this->createFooter();
+        return true;
+    }
+
+    protected function convert2SqlDel()
+    {
+        $this->createHeader();
+
+        if (!$this->createRecordsDel()) {
             return false;
         }
 
@@ -221,6 +247,21 @@ class DbfConverter
         return True;
     }
 
+    protected function createRecordsDel()
+    {
+        /* add a header */
+        $this->createTableHeaderDel();
+        $this->lockTable();
+
+        if (!$this->dumpRecordsDel()) {
+            return false;
+        }
+
+        /* unlock table */
+        $this->unlockTable();
+        return True;
+    }
+
     protected function unlockTable()
     {
         $this->addToOutput("UNLOCK TABLES;");
@@ -230,16 +271,20 @@ class DbfConverter
     {
         $this->insertLine = "INSERT IGNORE INTO `" . $this->changedTableName . "` (" . $this->removeSpaceFromLine($this->fieldNamesStr) . ") VALUES ";
         $this->addToOutput($this->insertLine);
+        $pk = '';
+        if ($this->tablesArray[$this->tableName]['pk_id']) {
+            $pk = "Null,";
+        }
         /* walk the records */
         $itCount = 0;
         for ($i = 1; $i <= $this->recordsCount; $i++) {
             if ($itCount >= self::MAX_INSERT_LINES) {
                 $this->insertLine = "INSERT IGNORE INTO `" . $this->changedTableName . "` (" . $this->removeSpaceFromLine($this->fieldNamesStr) . ") VALUES ";
-                $this->insertLine .= " (Null,";
+                $this->insertLine .= " ($pk";
                 $itCount = 0;
             } else {
                 /*create the INSERT line. We use IGNORE to avoid duplicate record problems */
-                $this->insertLine = " (Null,";
+                $this->insertLine = " ($pk";
             }
 
             if (!$this->getRecord($i)) {
@@ -268,6 +313,31 @@ class DbfConverter
             }
             $this->addToOutput($this->insertLine);
             $itCount++;
+        }
+
+
+//        $this->addToOutput($this->insertLine);
+        return true;
+    }
+
+    protected function dumpRecordsDel()
+    {
+        $delColDbf = $this->tablesArray[$this->tableName]['del_where_col'];
+        $this->insertLine = "DELETE FROM `" . $this->changedTableName . "` WHERE " . $this->tablesArray[$this->tableName]['rowsArray'][$delColDbf] . " IN (";
+        $this->addToOutput($this->insertLine);
+
+        for ($i = 1; $i <= $this->recordsCount; $i++) {
+            if (!$this->getRecordDel($i)) {
+                return false;
+            }
+            $this->insertLine = "'" . $this->record[$delColDbf] . "', ";
+
+            if ($i === $this->recordsCount) {
+                $this->insertLine = $this->removeSpaceFromLine($this->insertLine);
+                /*  finish the INSERT line*/
+                $this->insertLine .= ");";
+            }
+            $this->addToOutput($this->insertLine);
         }
 
 
@@ -306,17 +376,18 @@ class DbfConverter
                 /* convert apostrophes, accents and backslashes */
 
                 $encoding = mb_detect_encoding($this->record[$index], array('cp866'));
+//                $encoding = mb_detect_encoding($this->record[$index], array('windows-1251')); // for nordoc.dbf decode
                 $this->record[$index] = iconv($encoding,'UTF-8//TRANSLIT//IGNORE',$this->record[$index]);
-                $this->record[$index] = str_replace("'","&apos;",$this->record[$index]);
-                $this->record[$index] = str_replace("\"","&quot;",$this->record[$index]);
-                $this->record[$index] = str_replace("`","&#096;",$this->record[$index]);
-                $this->record[$index] = str_replace("´","&acute;",$this->record[$index]);
-                $this->record[$index] = str_replace("\\","&#092;",$this->record[$index]);
+//                $this->record[$index] = str_replace("'","&apos;",$this->record[$index]);
+//                $this->record[$index] = str_replace("\"","&quot;",$this->record[$index]);
+//                $this->record[$index] = str_replace("`","&#096;",$this->record[$index]);
+//                $this->record[$index] = str_replace("´","&acute;",$this->record[$index]);
+//                $this->record[$index] = str_replace("\\","&#092;",$this->record[$index]);
 
                 /* convert rare characters to HTML characters */
-                $this->record[$index] = strtr($this->record[$index], get_html_translation_table(HTML_ENTITIES));
+//                $this->record[$index] = strtr($this->record[$index], get_html_translation_table(HTML_ENTITIES));
                 /*transform the enter into <BR> */
-                $this->record[$index] = nl2br($this->record[$index]);
+//                $this->record[$index] = nl2br($this->record[$index]);
                 /* remove the blanks */
                 $this->record[$index] = trim($this->record[$index]);
                 return true;
@@ -386,7 +457,16 @@ class DbfConverter
         return true;
     }
 
-
+    protected function getRecordDel($index) {
+        $this->record = dbase_get_record_with_names($this->archiveDBF, $index);
+        if (!$this->record) {
+            $message = "Failed to get record. \n";
+            $this->log->error($message);
+            echo $message;
+            return false;
+        }
+        return true;
+    }
     protected function lockTable() {
         $this->addToOutput("LOCK TABLES `" . $this->changedTableName . "` WRITE;");
     }
@@ -400,6 +480,14 @@ class DbfConverter
         $this->addToOutput("");
     }
 
+    protected function createTableHeaderDel()
+    {
+        $this->addToOutput("");
+        $this->addToOutput("--");
+        $this->addToOutput("-- Dumping data for deleting the table " . $this->changedTableName);
+        $this->addToOutput("--");
+        $this->addToOutput("");
+    }
     /*
      * create the table
      *  
@@ -407,13 +495,18 @@ class DbfConverter
     protected function createTable()
     {
         $tableName = $this->changedTableName;
+        $pk = "";
         //create primary key by table name and '_id' suffix
-        $primaryId = $tableName . '_id';
-        $this->fieldNamesStr .= $primaryId . ', ';
+        if ($this->tablesArray[$this->tableName]['pk_id']) {
+            $primaryId = $tableName . '_id';
+            $this->fieldNamesStr .= $primaryId . ', ';
+            $pk = "`$primaryId` bigint(11) NOT NULL AUTO_INCREMENT PRIMARY KEY";
+        }
+
         /* create the initial line of CREATE TABLE */
-        $table = "CREATE TABLE IF NOT EXISTS $tableName (`$primaryId` bigint(11) NOT NULL AUTO_INCREMENT PRIMARY KEY";
+        $table = "CREATE TABLE IF NOT EXISTS $tableName ($pk";
         /* We verified that there taken values */
-        if ($tableName == "" || $primaryId == "_id") {
+        if ($tableName == "") {
             $message = "The header was not created correctly \n";
             $this->log->error($message);
             echo $message;
@@ -435,8 +528,13 @@ class DbfConverter
                 echo $message;
                 return false;
             }
-            /* set up the field type */
-            $table .= ", `$fieldName` $fieldType ";
+            if ($i === 0 && $pk === '') {
+                /* set up the field type */
+                $table .= " `$fieldName` $fieldType ";
+            } else {
+                $table .= ", `$fieldName` $fieldType ";
+            }
+
             $this->fieldNamesStr .= "$fieldName, ";
         }
         $table .= ");";

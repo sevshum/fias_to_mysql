@@ -186,8 +186,11 @@ class XmlConverter
 
     public function handleFields()
     {
-        $primaryId = $this->tableName . '_id';
-        $this->fieldNamesStr .= $primaryId . ', ';
+        if ($this->tablesArray[$this->name]['pk_id']) {
+            $primaryId = $this->tableName . '_id';
+            $this->fieldNamesStr .= $primaryId . ', ';
+        }
+
 
         foreach($this->archiveXml->children()[0]->attributes() as $a => $b) {
             //field isset in array
@@ -269,6 +272,10 @@ class XmlConverter
     {
         $this->insertLine = "INSERT IGNORE INTO `" . $this->tableName . "` (" . $this->removeSpaceFromLine($this->fieldNamesStr) . ") VALUES ";
         $this->addToOutput($this->insertLine);
+        $pk = '';
+        if ($this->tablesArray[$this->name]['pk_id']) {
+            $pk = "Null,";
+        }
         /* walk the records */
         $itCount = 0;
         $i= 0;
@@ -276,11 +283,11 @@ class XmlConverter
             $i++;
             if ($itCount >= self::MAX_INSERT_LINES) {
                 $this->insertLine = "INSERT IGNORE INTO `" . $this->tableName . "` (" . $this->removeSpaceFromLine($this->fieldNamesStr) . ") VALUES ";
-                $this->insertLine .= " (Null,";
+                $this->insertLine .= " ($pk";
                 $itCount = 0;
             } else {
                 /*create the INSERT line. We use IGNORE to avoid duplicate record problems */
-                $this->insertLine = " (Null,";
+                $this->insertLine = " ($pk";
             }
 
 //            if (!$this->getRecord($i)) {

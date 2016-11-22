@@ -27,3 +27,4 @@ set_time_limit(0);
 //DbfConverter::saveSQL(__DIR__ . '/../../dbf/HOUSE01.DBF', $config['tablesArray'], $config['outputDirDbf']);
 $fias = new \B3\Fias($config);
 $fias->convertMainDBDbf();
+//$fias->convertMainDBXml();

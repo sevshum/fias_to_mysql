@@ -14,8 +14,8 @@ class Fias
     const TABLE_DADDROBJ = 'DADD';
     const TABLE_CENTERST = 'CENT';
     const TABLE_CURENTST = 'CURE';
-    const TABLE_DHOUSE = 'DHOU';
-    const TABLE_DHOUSEINT = 'DHOUSEINT';
+    const TABLE_DHOUSE = 'DHOUSE.';
+    const TABLE_DHOUSEINT = 'DHOUSINT';
     const TABLE_DNORDOC = 'DNOR';
     const TABLE_ESTSTAT = 'ESTS';
     const TABLE_HOUSE = 'HOUS';
@@ -68,7 +68,7 @@ class Fias
 //            $this->_convertPartXml($file, self::TABLE_XML_HOUSE);
 //            $this->_convertPartXml($file, self::TABLE_XML_HOUSEINT, 11);
 //            $this->_convertPartXml($file, self::TABLE_XML_STEAD);
-            $this->_convertPartXml($file, self::TABLE_XML_ACTSTAT);
+//            $this->_convertPartXml($file, self::TABLE_XML_ACTSTAT);
 //            $this->_convertPartXml($file, self::TABLE_XML_ADDROBJ);
 //            $this->_convertPartXml($file, self::TABLE_XML_DADDROBJ, 15);
 //            $this->_convertPartXml($file, self::TABLE_XML_CENTERST);
@@ -77,9 +77,9 @@ class Fias
 //            $this->_convertPartXml($file, self::TABLE_XML_DHOUSEINT, 15);
 //            $this->_convertPartXml($file, self::TABLE_XML_DNORDOC, 14);
 //            $this->_convertPartXml($file, self::TABLE_XML_ESTSTAT);
-//            $this->_convertPartXml($file, self::TABLE_XML_HSTSTAT);
+            $this->_convertPartXml($file, self::TABLE_XML_HSTSTAT);
 //            $this->_convertPartXml($file, self::TABLE_XML_INTVSTAT);
-//            $this->_convertPartXml($file, self::TABLE_XML_LANDMARK);
+            $this->_convertPartXml($file, self::TABLE_XML_LANDMARK);
 //            $this->_convertPartXml($file, self::TABLE_XML_NDOCTYPE);
 //            $this->_convertPartXml($file, self::TABLE_XML_OPERSTATE);
 //            $this->_convertPartXml($file, self::TABLE_XML_SOCRBASE);
@@ -100,13 +100,13 @@ class Fias
 //            $this->_convertPart($file, self::TABLE_HOUSE);
 //            $this->_convertPart($file, self::TABLE_HOUSEINT, 8);
 //            $this->_convertPart($file, self::TABLE_STEAD);
-//            $this->_convertPart($file, self::TABLE_ACTSTAT);
+            $this->_convertPart($file, self::TABLE_ACTSTAT);
 //            $this->_convertPart($file, self::TABLE_ADDROBJ);
 //            $this->_convertPart($file, self::TABLE_DADDROBJ);
 //            $this->_convertPart($file, self::TABLE_CENTERST);
 //            $this->_convertPart($file, self::TABLE_CURENTST);
-//            $this->_convertPart($file, self::TABLE_DHOUSE);
-//            $this->_convertPart($file, self::TABLE_DHOUSEINT, 9);
+//            $this->_convertPart($file, self::TABLE_DHOUSE, 7);
+//            $this->_convertPart($file, self::TABLE_DHOUSEINT, 8);
 //            $this->_convertPart($file, self::TABLE_DNORDOC);
 //            $this->_convertPart($file, self::TABLE_ESTSTAT);
 //            $this->_convertPart($file, self::TABLE_HSTSTAT);
@@ -116,7 +116,7 @@ class Fias
 //            $this->_convertPart($file, self::TABLE_OPERSTATE);
 //            $this->_convertPart($file, self::TABLE_SOCRBASE);
 //            $this->_convertPart($file, self::TABLE_STRSTAT);
-            $this->_convertPart($file, self::TABLE_NORDOC);
+//            $this->_convertPart($file, self::TABLE_NORDOC);
         }
 
     }
