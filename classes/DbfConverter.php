@@ -16,12 +16,10 @@ use Monolog\Handler\StreamHandler;
  *		DbfConverter::saveSQL($filename, $tablesArray);
  *
  */
-class DbfConverter
+class DbfConverter extends Converter
 {
     const LOG_NAME = 'DBF_CONVERTER';
-    const LOG_PATH = '../runtime/app.log';
 
-    const MAX_INSERT_LINES = 5000;
 
     const DNORDOC_TABLE = 'DNORDOC';
     //just in case. This field is memo dbf field. It saved in DNORDOC.DBT. dbase extension does not work with memo
@@ -30,49 +28,38 @@ class DbfConverter
     //just in case. This field is memo dbf field. It saved in LANDMARK.DBT. dbase extension does not work with memo
 //    const LANDMARK_MEMO_FIELD = 'LOCATION'; //just in case
 
-
-    protected $archiveDBF = "";
-    //name of file without extension
-    protected $name	= "";
-    //table name in fias db
-    protected $tableName	= "";
-    //Table name in our db
-    protected $changedTableName	= "";
-    protected $size	= 0;
-    protected $fieldsCount = 0;
-    protected $recordsCount = 0;
-    protected $fieldsTitiles = [];
-    protected $outputSQL = [];
-    protected $time	= 0;
-
-    protected $insertLine;
-    protected $record;
-    protected $fileName;
-    protected $fieldNamesStr = '';
-    protected $log;
-
-    //to convert tables and rows names
-    protected $tablesArray = [];
-
-    private function __construct($fileDBF, $tablesArray)
+    private function __construct($file, $tablesArray)
     {
-        // create a log channel
-        $this->log = new Logger(self::LOG_NAME);
-        $this->log->pushHandler(new StreamHandler(self::LOG_PATH, Logger::WARNING));
-//        $this->log->pushHandler(new NativeMailerHandler(
-//            'me@example.com',
-//            'Fias logging. Error occured!',
-//            'Fias logging'
-//        ));
+        $this->_initConstr($file, $tablesArray);
+    }
 
+    protected function getNameOnly()
+    {
 
-        $this->tablesArray = $tablesArray;
-        $this->archiveDBF = $fileDBF;
-        $this->name = $this->getNameOnly();
-        $this->tableName = $this->getTableName();
-        $this->changedTableName = $this->getChangedTableName();
-        $this->size = filesize($this->archiveDBF);
-        $this->time = $this->getFullTime();
+        $nameFull = explode("/", $this->archive);
+        $nameFull = $nameFull[count($nameFull) - 1];
+        $nameFull = explode(".", $nameFull);
+        return $nameFull[0];
+    }
+
+    protected function getTableName()
+    {
+
+        $nameFull = explode("/", $this->archive);
+        $nameFull = $nameFull[count($nameFull) - 1];
+        $nameFull = explode(".", $nameFull);
+        return preg_replace('/\d+$/u', '', $nameFull[0]);
+    }
+
+    protected function getChangedTableName()
+    {
+        if (!isset($this->tablesArray[$this->tableName]['name'])) {
+            $message = "Table not found in tablesArray. Please check config.php file for names of tables for " . $this->tableName . "\n";
+            $this->log->error($message);
+            echo $message;
+            return false;
+        }
+        return $this->tablesArray[$this->tableName]['name'];
     }
 
     public static function saveSQL($archive, $tablesArray, $toDir)
@@ -83,6 +70,42 @@ class DbfConverter
         }
     }
 
+    /*
+         * We verified that we have the library to work with dBase files
+         *
+         */
+    protected function convert()
+    {
+        if ($this->dBaseOk()) {
+            /* verify that the file exists */
+            if (is_file($this->archive) && is_readable($this->archive)) {
+                /* If everything is Ok we open the file to work on */
+                $this->archive = dbase_open($this->archive, 0);
+                /* get the number of fields */
+                $this->fieldsCount = dbase_numfields($this->archive);
+                /* get the number of records */
+                $this->recordsCount = dbase_numrecords($this->archive);
+                /* get the titles of the fields */
+                $this->fieldsTitiles = dbase_get_header_info($this->archive);
+                if ($this->tablesArray[$this->tableName]['del_where_col']) {
+                    return $this->convert2SqlDel();
+                } else {
+                    return $this->convert2Sql();
+                }
+
+            } else {
+                $message = "The file '" . $this->name . "' does not exist or does not have read permissions\n";
+                $this->log->error($message);
+                echo $message;
+                return false;
+            }
+        } else {
+            $message = "You need the 'dbase' library to be able to convert DBF files\n";
+            $this->log->error($message);
+            echo $message;
+            return false;
+        }
+    }
 
     protected function saveToFile($toDir)
     {
@@ -116,42 +139,7 @@ class DbfConverter
         }
     }
 
-    /*
-     * We verified that we have the library to work with dBase files
-     *
-     */
-    protected function convert()
-    {
-        if ($this->dBaseOk()) {
-            /* verify that the file exists */
-            if (is_file($this->archiveDBF) && is_readable($this->archiveDBF)) {
-                /* If everything is Ok we open the file to work on */
-                $this->archiveDBF = dbase_open($this->archiveDBF, 0);
-                /* get the number of fields */
-                $this->fieldsCount = dbase_numfields($this->archiveDBF);
-                /* get the number of records */
-                $this->recordsCount = dbase_numrecords($this->archiveDBF);
-                /* get the titles of the fields */
-                $this->fieldsTitiles = dbase_get_header_info($this->archiveDBF);
-                if ($this->tablesArray[$this->tableName]['del_where_col']) {
-                    return $this->convert2SqlDel();
-                } else {
-                    return $this->convert2Sql();
-                }
 
-            } else {
-                $message = "The file '" . $this->name . "' does not exist or does not have read permissions\n";
-                $this->log->error($message);
-                echo $message;
-                return false;
-            }
-        } else {
-            $message = "You need the 'dbase' library to be able to convert DBF files\n";
-            $this->log->error($message);
-            echo $message;
-            return false;
-        }
-    }
 
     /*
      * With this function check if there is the library needed to work with DBF files
@@ -205,46 +193,14 @@ class DbfConverter
         return true;
     }
 
-    protected function createFooter()
-    {
-        $this->addToOutput("/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;");
-        $this->addToOutput("");
-        $this->addToOutput("/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;");
-        $this->addToOutput("/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;");
-        $this->addToOutput("/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;");
-        $this->addToOutput("/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;");
-        $this->addToOutput("");
-        $this->addToOutput("-- Conversion completed. " . date("Y-m-d H:i:s"));
-        $this->addToOutput("-- Duration of conversion: " . $this->totalTime());
-    }
 
-    protected function totalTime()
-    {
-        $this->time = $this->getFullTime() - $this->time;
-        return number_format($this->time,4,",",".") . " seconds";
-    }
 
     protected function closeDbf()
     {
-        if (!dbase_close($this->archiveDBF)) {
+        if (!dbase_close($this->archive)) {
             return false;
         }
         return true;
-    }
-
-    protected function createRecords()
-    {
-        /* add a header */
-        $this->createTableHeader();
-        $this->lockTable();
-
-        if (!$this->dumpRecords()) {
-            return false;
-        }
-
-        /* unlock table */
-        $this->unlockTable();
-        return True;
     }
 
     protected function createRecordsDel()
@@ -262,10 +218,6 @@ class DbfConverter
         return True;
     }
 
-    protected function unlockTable()
-    {
-        $this->addToOutput("UNLOCK TABLES;");
-    }
 
     protected function dumpRecords()
     {
@@ -345,11 +297,7 @@ class DbfConverter
         return true;
     }
 
-    protected function removeSpaceFromLine($line)
-    {
-        /* We remove the comma and space ',' left over in the string */
-        return substr($line,0,(strlen($line) - 2));
-    }
+
 
     protected function addItem($index)
     {
@@ -378,11 +326,11 @@ class DbfConverter
                 $encoding = mb_detect_encoding($this->record[$index], array('cp866'));
 //                $encoding = mb_detect_encoding($this->record[$index], array('windows-1251')); // for nordoc.dbf decode
                 $this->record[$index] = iconv($encoding,'UTF-8//TRANSLIT//IGNORE',$this->record[$index]);
-//                $this->record[$index] = str_replace("'","&apos;",$this->record[$index]);
-//                $this->record[$index] = str_replace("\"","&quot;",$this->record[$index]);
-//                $this->record[$index] = str_replace("`","&#096;",$this->record[$index]);
-//                $this->record[$index] = str_replace("´","&acute;",$this->record[$index]);
-//                $this->record[$index] = str_replace("\\","&#092;",$this->record[$index]);
+                $this->record[$index] = str_replace("'","&apos;",$this->record[$index]);
+                $this->record[$index] = str_replace("\"","&quot;",$this->record[$index]);
+                $this->record[$index] = str_replace("`","&#096;",$this->record[$index]);
+                $this->record[$index] = str_replace("´","&acute;",$this->record[$index]);
+                $this->record[$index] = str_replace("\\","&#092;",$this->record[$index]);
 
                 /* convert rare characters to HTML characters */
 //                $this->record[$index] = strtr($this->record[$index], get_html_translation_table(HTML_ENTITIES));
@@ -439,7 +387,7 @@ class DbfConverter
     }
 
     protected function getRecord($index) {
-        $this->record = dbase_get_record($this->archiveDBF, $index);
+        $this->record = dbase_get_record($this->archive, $index);
         if (!$this->record) {
             $message = "Failed to get record. \n";
             $this->log->error($message);
@@ -458,7 +406,7 @@ class DbfConverter
     }
 
     protected function getRecordDel($index) {
-        $this->record = dbase_get_record_with_names($this->archiveDBF, $index);
+        $this->record = dbase_get_record_with_names($this->archive, $index);
         if (!$this->record) {
             $message = "Failed to get record. \n";
             $this->log->error($message);
@@ -467,18 +415,7 @@ class DbfConverter
         }
         return true;
     }
-    protected function lockTable() {
-        $this->addToOutput("LOCK TABLES `" . $this->changedTableName . "` WRITE;");
-    }
 
-    protected function createTableHeader()
-    {
-        $this->addToOutput("");
-        $this->addToOutput("--");
-        $this->addToOutput("-- Dumping data for the table " . $this->changedTableName);
-        $this->addToOutput("--");
-        $this->addToOutput("");
-    }
 
     protected function createTableHeaderDel()
     {
@@ -579,63 +516,5 @@ class DbfConverter
         return $type;
     }
 
-    /*
-     * create the header of the SQL file
-     */
-    protected function createHeader()
-    {
-        $this->addToOutput("--");
-        $this->addToOutput("");
-        $this->addToOutput("/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;");
-        $this->addToOutput("/*!40103 SET TIME_ZONE='+00:00' */;");
-        $this->addToOutput("/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;");
-        $this->addToOutput("/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;");
-        $this->addToOutput("/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;");
-        $this->addToOutput("/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;");
-        $this->addToOutput("");
-    }
 
-    /*
-     * add a line to the SQL output
-     *
-     */
-    protected function addToOutput($line)
-    {
-
-        $this->outputSQL[] = $line;
-    }
-
-    protected function getNameOnly()
-    {
-
-        $nameFull = explode("/", $this->archiveDBF);
-        $nameFull = $nameFull[count($nameFull) - 1];
-        $nameFull = explode(".", $nameFull);
-        return $nameFull[0];
-    }
-
-    protected function getTableName()
-    {
-
-        $nameFull = explode("/", $this->archiveDBF);
-        $nameFull = $nameFull[count($nameFull) - 1];
-        $nameFull = explode(".", $nameFull);
-        return preg_replace('/\d+$/u', '', $nameFull[0]);
-    }
-
-    protected function getChangedTableName()
-    {
-        if (!isset($this->tablesArray[$this->tableName]['name'])) {
-            $message = "Table not found in tablesArray. Please check config.php file for names of tables for " . $this->tableName . "\n";
-            $this->log->error($message);
-            echo $message;
-            return false;
-        }
-        return $this->tablesArray[$this->tableName]['name'];
-    }
-    protected function getFullTime()
-    {
-        $time = explode(" ",microtime());
-        return $time[1] + $time[0];
-    }
 }

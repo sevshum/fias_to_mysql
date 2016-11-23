@@ -169,7 +169,7 @@ $houseint = [
     'IFNSUL' => 'house_interval_ifns_ur_li',
     'INTEND' => 'house_interval_interval_end',
     'INTSTART' => 'house_interval_interval_start',
-    'INTSTATUS' => 'house_interval_interval_status',
+    'INTSTATUS' => 'house_interval_int_status',
     'OKATO' => 'house_interval_okato',
     'OKTMO' => 'house_interval_oktmo',
     'POSTALCODE' => 'house_interval_postal_code',
@@ -181,12 +181,12 @@ $houseint = [
     'COUNTER' => 'house_interval_counter',
 ];
 $normdoc = [
-    'DOCDATE' => 'dnorm_doc_doc_date',
-    'DOCNAME' => 'dnorm_doc_doc_name',
-    'DOCNUM' => 'dnorm_doc_doc_num',
-    'DOCTYPE' => 'dnorm_doc_doc_type',
-    'DOCIMGID' => 'dnorm_doc_doc_imgid',
-    'NORMDOCID' => 'dnorm_doc_normdoc_id',
+    'DOCDATE' => 'norm_doc_doc_date',
+    'DOCNAME' => 'norm_doc_doc_name',
+    'DOCNUM' => 'norm_doc_doc_num',
+    'DOCTYPE' => 'norm_doc_doc_type',
+    'DOCIMGID' => 'norm_doc_doc_imgid',
+    'NORMDOCID' => 'norm_doc_normdoc_id',
 ];
 $eststat = [
     'ESTSTATID' => 'estate_status_id',

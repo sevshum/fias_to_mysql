@@ -16,12 +16,9 @@ use Monolog\Handler\StreamHandler;
  *		XmlConverter::saveSQL($filename, $tablesArray);
  *
  */
-class XmlConverter
+class XmlConverter extends Converter 
 {
     const LOG_NAME = 'XML_CONVERTER';
-    const LOG_PATH = '../runtime/app.log';
-
-    const MAX_INSERT_LINES = 5000;
 
     const DNORDOC_TABLE = 'DNORDOC';
     //just in case. This field is memo xml field. It saved in DNORDOC.DBT. dbase extension does not work with memo
@@ -30,56 +27,16 @@ class XmlConverter
     //just in case. This field is memo xml field. It saved in LANDMARK.DBT. dbase extension does not work with memo
 //    const LANDMARK_MEMO_FIELD = 'LOCATION'; //just in case
 
-
-    protected $archiveXml = "";
-    //name of file without extension
-    protected $name	= "";
-    //table name in fias db
-    protected $tableName	= "";
-    //Table name in our db
-    protected $changedTableName	= "";
-    protected $size	= 0;
-    protected $fieldsCount = 0;
-    protected $recordsCount = 0;
-    protected $fieldsTitiles = [];
-    protected $outputSQL = [];
-    protected $time	= 0;
-
-    protected $insertLine;
-    protected $record;
-    protected $fileName;
-    protected $fieldNamesStr = '';
-    protected $log;
-
-    //to convert tables and rows names
-    protected $tablesArray = [];
-
-    private function __construct($fileXml, $tablesArray)
+    private function __construct($file, $tablesArray)
     {
-        // create a log channel
-        $this->log = new Logger(self::LOG_NAME);
-        $this->log->pushHandler(new StreamHandler(self::LOG_PATH, Logger::WARNING));
-//        $this->log->pushHandler(new NativeMailerHandler(
-//            'me@example.com',
-//            'Fias logging. Error occured!',
-//            'Fias logging'
-//        ));
-
-
-        $this->tablesArray = $tablesArray;
-        $this->archiveXml = $fileXml;
-        $this->name = $this->getName();
-        $this->tableName = $this->getTableName();
-//        $this->tableNameXml = $this->getTableNameXml();
-        $this->size = filesize($this->archiveXml);
-        $this->time = $this->getFullTime();
+        $this->_initConstr($file, $tablesArray);
     }
 
-    protected function getName()
+    protected function getNameOnly()
     {
         $tables = array_keys($this->tablesArray);
         foreach ($tables as $table) {
-            if (stripos($this->archiveXml, $table) !== false) {
+            if (stripos($this->archive, $table) !== false) {
                 return $table;
             }
         }
@@ -92,9 +49,15 @@ class XmlConverter
 
     protected function getTableName()
     {
+        return $this->getNameOnly();
+
+    }
+
+    protected function getChangedTableName()
+    {
         $tables = array_keys($this->tablesArray);
         foreach ($tables as $table) {
-            if (stripos($this->archiveXml, $table) !== false) {
+            if (stripos($this->archive, $table) !== false) {
                 return $this->tablesArray[$table]['name'];
             }
         }
@@ -109,7 +72,7 @@ class XmlConverter
 //    {
 //        $tables = array_keys($this->tablesArray);
 //        foreach ($tables as $table) {
-//            if (stripos($this->archiveXml, $table) !== false) {
+//            if (stripos($this->archive, $table) !== false) {
 //                return $this->tablesArray[$table]['name_xml'];
 //            }
 //        }
@@ -126,6 +89,34 @@ class XmlConverter
         if ($xml2sql->convert()) {
             $xml2sql->saveToFile($toDir);
         }
+    }
+
+    /*
+    * We verified that we have the library to work with dBase files
+    *
+    */
+    protected function convert()
+    {
+        /* verify that the file exists */
+        if (is_file($this->archive) && is_readable($this->archive)) {
+            /* If everything is Ok we open the file to work on */
+            $this->archive = simplexml_load_file($this->archive);
+            if (!$this->handleFields()) {
+                return false;
+            }
+            /* get the number of records */
+            $this->recordsCount = $this->archive->count();
+            /* get the titles of the fields */
+//            $this->fieldsTitiles = dbase_get_header_info($this->archive);
+
+            return $this->convert2Sql();
+        } else {
+            $message = "The file '" . $this->name . "' does not exist or does not have read permissions\n";
+            $this->log->error($message);
+            echo $message;
+            return false;
+        }
+
     }
 
 
@@ -156,56 +147,29 @@ class XmlConverter
         }
     }
 
-    /*
-     * We verified that we have the library to work with dBase files
-     *
-     */
-    protected function convert()
-    {
-        /* verify that the file exists */
-        if (is_file($this->archiveXml) && is_readable($this->archiveXml)) {
-            /* If everything is Ok we open the file to work on */
-            $this->archiveXml = simplexml_load_file($this->archiveXml);
-            if (!$this->handleFields()) {
-                return false;
-            }
-            /* get the number of records */
-            $this->recordsCount = $this->archiveXml->count();
-            /* get the titles of the fields */
-//            $this->fieldsTitiles = dbase_get_header_info($this->archiveXml);
-
-            return $this->convert2Sql();
-        } else {
-            $message = "The file '" . $this->name . "' does not exist or does not have read permissions\n";
-            $this->log->error($message);
-            echo $message;
-            return false;
-        }
-
-    }
 
     public function handleFields()
     {
         if ($this->tablesArray[$this->name]['pk_id']) {
-            $primaryId = $this->tableName . '_id';
+            $primaryId = $this->changedTableName . '_id';
             $this->fieldNamesStr .= $primaryId . ', ';
         }
-
-
-        foreach($this->archiveXml->children()[0]->attributes() as $a => $b) {
+        //check fields with our array in config
+        foreach($this->archive->children()[0]->attributes() as $a => $b) {
             //field isset in array
-            if (isset($this->tablesArray[$this->name]['rowsArray'][$a])) {
-                $fieldName = $this->tablesArray[$this->name]['rowsArray'][$a];
-                $this->fieldNamesStr .= "$fieldName, ";
-            } else {
+            if (!isset($this->tablesArray[$this->name]['rowsArray'][$a])) {
                 $message = "Field not found in rowsArray. Please check config.php file for names of rows for " . $a . " in table " . $this->name . "\n";
                 $this->log->error($message);
                 echo $message;
                 return false;
             }
-
         }
 
+        if (isset($this->tablesArray[$this->name]['rowsArray'])) {
+            foreach ($this->tablesArray[$this->name]['rowsArray'] as $value) {
+                $this->fieldNamesStr .= "$value, ";
+            }
+        }
         return true;
     }
 
@@ -224,53 +188,20 @@ class XmlConverter
         return true;
     }
 
-    protected function createFooter()
-    {
-        $this->addToOutput("/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;");
-        $this->addToOutput("");
-        $this->addToOutput("/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;");
-        $this->addToOutput("/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;");
-        $this->addToOutput("/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;");
-        $this->addToOutput("/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;");
-        $this->addToOutput("");
-        $this->addToOutput("-- Conversion completed. " . date("Y-m-d H:i:s"));
-        $this->addToOutput("-- Duration of conversion: " . $this->totalTime());
-    }
 
-    protected function totalTime()
-    {
-        $this->time = $this->getFullTime() - $this->time;
-        return number_format($this->time,4,",",".") . " seconds";
-    }
+
+
 
     protected function closeXml()
     {
-        $this->archiveXml = null;
+        $this->archive = null;
     }
 
-    protected function createRecords()
-    {
-        /* add a header */
-        $this->createTableHeader();
-        $this->lockTable();
 
-        if (!$this->dumpRecords()) {
-            return false;
-        }
-
-        /* unlock table */
-        $this->unlockTable();
-        return True;
-    }
-
-    protected function unlockTable()
-    {
-        $this->addToOutput("UNLOCK TABLES;");
-    }
 
     protected function dumpRecords()
     {
-        $this->insertLine = "INSERT IGNORE INTO `" . $this->tableName . "` (" . $this->removeSpaceFromLine($this->fieldNamesStr) . ") VALUES ";
+        $this->insertLine = "INSERT IGNORE INTO `" . $this->changedTableName . "` (" . $this->removeSpaceFromLine($this->fieldNamesStr) . ") VALUES ";
         $this->addToOutput($this->insertLine);
         $pk = '';
         if ($this->tablesArray[$this->name]['pk_id']) {
@@ -279,10 +210,10 @@ class XmlConverter
         /* walk the records */
         $itCount = 0;
         $i= 0;
-        foreach ($this->archiveXml as $item) {
+        foreach ($this->archive as $item) {
             $i++;
             if ($itCount >= self::MAX_INSERT_LINES) {
-                $this->insertLine = "INSERT IGNORE INTO `" . $this->tableName . "` (" . $this->removeSpaceFromLine($this->fieldNamesStr) . ") VALUES ";
+                $this->insertLine = "INSERT IGNORE INTO `" . $this->changedTableName . "` (" . $this->removeSpaceFromLine($this->fieldNamesStr) . ") VALUES ";
                 $this->insertLine .= " ($pk";
                 $itCount = 0;
             } else {
@@ -293,8 +224,12 @@ class XmlConverter
 //            if (!$this->getRecord($i)) {
 //                return false;
 //            }
-            foreach ($item->attributes() as $attribute => $value) {
-                $this->addItem($value);
+            foreach ($this->tablesArray[$this->name]['rowsArray'] as $name => $value) {
+                if (isset($item->attributes()[$name])) {
+                    $this->addItem($item->attributes()[$name]);
+                } else {
+                    $this->addItem('');
+                }
             }
 
             if ($itCount >= self::MAX_INSERT_LINES - 1) {
@@ -318,11 +253,6 @@ class XmlConverter
         return true;
     }
 
-    protected function removeSpaceFromLine($line)
-    {
-        /* We remove the comma and space ',' left over in the string */
-        return substr($line,0,(strlen($line) - 2));
-    }
 
     protected function addItem($value)
     {
@@ -401,7 +331,7 @@ class XmlConverter
 //    }
 
 //    protected function getRecord($index) {
-//        $this->record = dbase_get_record($this->archiveXml, $index);
+//        $this->record = dbase_get_record($this->archive, $index);
 //        if (!$this->record) {
 //            $message = "Failed to get record. \n";
 //            $this->log->error($message);
@@ -420,18 +350,8 @@ class XmlConverter
 //    }
 
 
-    protected function lockTable() {
-        $this->addToOutput("LOCK TABLES `" . $this->tableName . "` WRITE;");
-    }
 
-    protected function createTableHeader()
-    {
-        $this->addToOutput("");
-        $this->addToOutput("--");
-        $this->addToOutput("-- Dumping data for the table " . $this->tableName);
-        $this->addToOutput("--");
-        $this->addToOutput("");
-    }
+
 
     /*
      * create the table
@@ -514,31 +434,6 @@ class XmlConverter
 //        return $type;
 //    }
 
-    /*
-     * create the header of the SQL file
-     */
-    protected function createHeader()
-    {
-        $this->addToOutput("--");
-        $this->addToOutput("");
-        $this->addToOutput("/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;");
-        $this->addToOutput("/*!40103 SET TIME_ZONE='+00:00' */;");
-        $this->addToOutput("/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;");
-        $this->addToOutput("/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;");
-        $this->addToOutput("/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;");
-        $this->addToOutput("/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;");
-        $this->addToOutput("");
-    }
-
-    /*
-     * add a line to the SQL output
-     *
-     */
-    protected function addToOutput($line)
-    {
-
-        $this->outputSQL[] = $line;
-    }
 
 
 
@@ -554,9 +449,4 @@ class XmlConverter
 //        }
 //        return $this->tablesArray[$this->tableName]['name'];
 //    }
-    protected function getFullTime()
-    {
-        $time = explode(" ",microtime());
-        return $time[1] + $time[0];
-    }
 }
