@@ -1,16 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: tol
- * Date: 23.11.16
- * Time: 12:43
- */
 
 namespace B3;
 
 
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use Monolog\Handler\NativeMailerHandler;
 
 abstract class Converter
 {
@@ -19,12 +14,26 @@ abstract class Converter
 
     const MAX_INSERT_LINES = 5000;
 
+    /**
+     * @var resource|string name of file with db info.
+     *
+     * Then resource of db engine
+     */
     protected $archive = "";
-    //name of file without extension
+
+    /**
+     * @var string name of file without extension.
+     */
     protected $name	= "";
-    //table name in fias db
+
+    /**
+     * @var string name in fias db.
+     */
     protected $tableName	= "";
-    //Table name in our db
+
+    /**
+     * @var string Table name in our db.
+     */
     protected $changedTableName	= "";
     protected $size	= 0;
     protected $fieldsCount = 0;
@@ -37,9 +46,15 @@ abstract class Converter
     protected $record;
     protected $fileName;
     protected $fieldNamesStr = '';
+
+    /**
+     * @var Logger the Monolog logger instance.
+     */
     protected $log;
 
-    //to convert tables and rows names
+    /**
+     * @var array to convert tables and rows names.
+     */
     protected $tablesArray = [];
 
     abstract protected function getNameOnly();
@@ -50,8 +65,11 @@ abstract class Converter
 
     abstract protected function dumpRecords();
 
+    abstract protected function dumpRecordsDel();
+
     protected function _initConstr($file, $tablesArray)
     {
+
         // create a log channel
         $this->log = new Logger(static::LOG_NAME);
         $this->log->pushHandler(new StreamHandler(self::LOG_PATH, Logger::WARNING));
@@ -77,6 +95,38 @@ abstract class Converter
         return $time[1] + $time[0];
     }
 
+    protected function saveToFile($toDir)
+    {
+        if ($this->tablesArray[$this->tableName]['del_where_col']) {
+            $this->fileName = $toDir . 'delete/' . $this->name . "DEL.sql";
+        } else {
+            $this->fileName = $toDir . $this->name . ".sql";
+        }
+
+        /* If the file already exists - exit */
+        if (is_file($this->fileName)) {
+            $message = "Another file with the name '" . realpath($this->fileName) . "' already exists in the current directory\n";
+            $this->log->error($message);
+            echo $message;
+            exit;
+        }
+        /* open the file */
+        if ($file = @fopen($this->fileName, "w")) {
+            foreach($this->outputSQL as $line) {
+                fputs($file, "$line\n");
+            }
+
+            fclose($file);
+            $message = "The file was stored in the '". realpath($this->fileName) ."'\n";
+            $this->log->info($message);
+            echo $message;
+        } else {
+            $message = "Can not write to directory\n";
+            $this->log->error($message);
+            echo $message;
+        }
+    }
+
     protected function createRecords()
     {
         /* add a header */
@@ -97,6 +147,32 @@ abstract class Converter
         $this->addToOutput("");
         $this->addToOutput("--");
         $this->addToOutput("-- Dumping data for the table " . $this->changedTableName);
+        $this->addToOutput("--");
+        $this->addToOutput("");
+    }
+
+
+
+    protected function createRecordsDel()
+    {
+        /* add a header */
+        $this->createTableHeaderDel();
+        $this->lockTable();
+
+        if (!$this->dumpRecordsDel()) {
+            return false;
+        }
+
+        /* unlock table */
+        $this->unlockTable();
+        return True;
+    }
+
+    protected function createTableHeaderDel()
+    {
+        $this->addToOutput("");
+        $this->addToOutput("--");
+        $this->addToOutput("-- Dumping data for deleting the table " . $this->changedTableName);
         $this->addToOutput("--");
         $this->addToOutput("");
     }

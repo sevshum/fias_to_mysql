@@ -17,6 +17,14 @@ output/*
 !output/.gitkeep
 output_from_xml/*
 !output_from_xml/.gitkeep
+output_delta/*
+!output_delta/.gitkeep
+output_from_xml_delta/*
+!output_from_xml_delta/.gitkeep
+dbf_delta/*
+!dbf_delta/.gitkeep
+fias_xml_delta/*
+!fias_xml_delta/.gitkeep
 
 runtime/*
 !runtime/.gitkeep

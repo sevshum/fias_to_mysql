@@ -6,8 +6,16 @@ namespace B3;
 class Fias
 {
     const ENDPOINT = 'http://fias.nalog.ru/Public/Downloads/Actual/';
-    const INPUT_DIR = __DIR__ . '/../../dbf/';
+
+    const INPUT_DIR_DBF = __DIR__ . '/../../dbf/';
     const INPUT_DIR_XML = __DIR__ . '/../../fias_xml/';
+    const OUTPUT_DIR_DBF = __DIR__ . '/../output/';
+    const OUTPUT_DIR_XML = __DIR__ . '/../output_from_xml/';
+
+    const INPUT_DIR_DBF_DELTA = __DIR__ . '/../dbf_delta/';
+    const INPUT_DIR_XML_DELTA = __DIR__ . '/../fias_xml_delta/';
+    const OUTPUT_DIR_DBF_DELTA = __DIR__ . '/../output_delta/';
+    const OUTPUT_DIR_XML_delta = __DIR__ . '/../output_from_xml_delta/';
 
     const TABLE_ACTSTAT = 'ACTS';
     const TABLE_ADDROBJ = 'ADDR';
@@ -68,13 +76,13 @@ class Fias
 //            $this->_convertPartXml($file, self::TABLE_XML_HOUSE);
 //            $this->_convertPartXml($file, self::TABLE_XML_HOUSEINT, 11);
 //            $this->_convertPartXml($file, self::TABLE_XML_STEAD);
-            $this->_convertPartXml($file, self::TABLE_XML_ACTSTAT);
+//            $this->_convertPartXml($file, self::TABLE_XML_ACTSTAT);
 //            $this->_convertPartXml($file, self::TABLE_XML_ADDROBJ);
 //            $this->_convertPartXml($file, self::TABLE_XML_DADDROBJ, 15);
 //            $this->_convertPartXml($file, self::TABLE_XML_CENTERST);
 //            $this->_convertPartXml($file, self::TABLE_XML_CURENTST);
 //            $this->_convertPartXml($file, self::TABLE_XML_DHOUSE, 12);
-//            $this->_convertPartXml($file, self::TABLE_XML_DHOUSEINT, 15);
+            $this->_convertPartXml($file, self::TABLE_XML_DHOUSEINT, 15);
 //            $this->_convertPartXml($file, self::TABLE_XML_DNORDOC, 14);
 //            $this->_convertPartXml($file, self::TABLE_XML_ESTSTAT);
 //            $this->_convertPartXml($file, self::TABLE_XML_HSTSTAT);
@@ -94,7 +102,7 @@ class Fias
     }
     public function convertMainDBDbf()
     {
-        $files = scandir(self::INPUT_DIR);
+        $files = scandir(self::INPUT_DIR_DBF);
         foreach ($files as $file) {
 //            $this->_convertPart($file, self::TABLE_ROOM);
 //            $this->_convertPart($file, self::TABLE_HOUSE);
@@ -140,7 +148,7 @@ class Fias
     private function _convertPart($file, $table, $length = 4)
     {
         if (substr($file, 0, $length) === $table) {
-            DbfConverter::saveSQL(self::INPUT_DIR . $file, $this->conf['tablesArray'], $this->conf['outputDirDbf']);
+            DbfConverter::saveSQL(self::INPUT_DIR_DBF . $file, $this->conf['tablesArray'], $this->conf['outputDirDbf']);
         }
     }
 }

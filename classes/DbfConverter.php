@@ -2,9 +2,6 @@
 
 namespace B3;
 
-use Monolog\Handler\NativeMailerHandler;
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
 
 /**
  *	Convert DBF files to other db file
@@ -71,9 +68,9 @@ class DbfConverter extends Converter
     }
 
     /*
-         * We verified that we have the library to work with dBase files
-         *
-         */
+     * We verified that we have the library to work with dBase files
+     *
+     */
     protected function convert()
     {
         if ($this->dBaseOk()) {
@@ -106,40 +103,6 @@ class DbfConverter extends Converter
             return false;
         }
     }
-
-    protected function saveToFile($toDir)
-    {
-        if ($this->tablesArray[$this->tableName]['del_where_col']) {
-            $this->fileName = $toDir . 'delete/' . $this->name . "DEL.sql";
-        } else {
-            $this->fileName = $toDir . $this->name . ".sql";
-        }
-
-        /* If the file already exists - exit */
-        if (is_file($this->fileName)) {
-            $message = "Another file with the name '" . realpath($this->fileName) . "' already exists in the current directory\n";
-            $this->log->error($message);
-            echo $message;
-            exit;
-        }
-        /* open the file */
-        if ($file = @fopen($this->fileName, "w")) {
-            foreach($this->outputSQL as $line) {
-                fputs($file, "$line\n");
-            }
-
-            fclose($file);
-            $message = "The file was stored in the '". realpath($this->fileName) ."'\n";
-            $this->log->info($message);
-            echo $message;
-        } else {
-            $message = "Can not write to directory\n";
-            $this->log->error($message);
-            echo $message;
-        }
-    }
-
-
 
     /*
      * With this function check if there is the library needed to work with DBF files
@@ -203,20 +166,7 @@ class DbfConverter extends Converter
         return true;
     }
 
-    protected function createRecordsDel()
-    {
-        /* add a header */
-        $this->createTableHeaderDel();
-        $this->lockTable();
 
-        if (!$this->dumpRecordsDel()) {
-            return false;
-        }
-
-        /* unlock table */
-        $this->unlockTable();
-        return True;
-    }
 
 
     protected function dumpRecords()
@@ -265,31 +215,6 @@ class DbfConverter extends Converter
             }
             $this->addToOutput($this->insertLine);
             $itCount++;
-        }
-
-
-//        $this->addToOutput($this->insertLine);
-        return true;
-    }
-
-    protected function dumpRecordsDel()
-    {
-        $delColDbf = $this->tablesArray[$this->tableName]['del_where_col'];
-        $this->insertLine = "DELETE FROM `" . $this->changedTableName . "` WHERE " . $this->tablesArray[$this->tableName]['rowsArray'][$delColDbf] . " IN (";
-        $this->addToOutput($this->insertLine);
-
-        for ($i = 1; $i <= $this->recordsCount; $i++) {
-            if (!$this->getRecordDel($i)) {
-                return false;
-            }
-            $this->insertLine = "'" . $this->record[$delColDbf] . "', ";
-
-            if ($i === $this->recordsCount) {
-                $this->insertLine = $this->removeSpaceFromLine($this->insertLine);
-                /*  finish the INSERT line*/
-                $this->insertLine .= ");";
-            }
-            $this->addToOutput($this->insertLine);
         }
 
 
@@ -396,15 +321,18 @@ class DbfConverter extends Converter
         }
 
         if($this->tableName === self::DNORDOC_TABLE) {
-//            unset($this->record['deleted']);
             array_splice($this->record, 1, 0, '');
         } elseif($this->tableName === self::LANDMARK_TABLE) {
-//            unset($this->record['deleted']);
             array_splice($this->record, 5, 0, '');
         }
         return true;
     }
 
+    /**
+     * Handles the specified request.
+     * @param int $index the index of record
+     * @return boolean succession of result
+     */
     protected function getRecordDel($index) {
         $this->record = dbase_get_record_with_names($this->archive, $index);
         if (!$this->record) {
@@ -416,15 +344,28 @@ class DbfConverter extends Converter
         return true;
     }
 
-
-    protected function createTableHeaderDel()
+    protected function dumpRecordsDel()
     {
-        $this->addToOutput("");
-        $this->addToOutput("--");
-        $this->addToOutput("-- Dumping data for deleting the table " . $this->changedTableName);
-        $this->addToOutput("--");
-        $this->addToOutput("");
+        $delColDbf = $this->tablesArray[$this->tableName]['del_where_col'];
+        $this->insertLine = "DELETE FROM `" . $this->changedTableName . "` WHERE " . $this->tablesArray[$this->tableName]['rowsArray'][$delColDbf] . " IN (";
+        $this->addToOutput($this->insertLine);
+        for ($i = 1; $i <= $this->recordsCount; $i++) {
+            if (!$this->getRecordDel($i)) {
+                return false;
+            }
+            $this->insertLine = "'" . $this->record[$delColDbf] . "', ";
+
+            if ($i === $this->recordsCount) {
+                $this->insertLine = $this->removeSpaceFromLine($this->insertLine);
+                /*  finish the INSERT line*/
+                $this->insertLine .= ");";
+            }
+            $this->addToOutput($this->insertLine);
+        }
+//        $this->addToOutput($this->insertLine);
+        return true;
     }
+
     /*
      * create the table
      *  
@@ -475,9 +416,6 @@ class DbfConverter extends Converter
             $this->fieldNamesStr .= "$fieldName, ";
         }
         $table .= ");";
-//        var_dump($this->fieldsCount);
-//        var_dump($this->fieldsTitiles);
-//        var_dump($table);
 
         $this->addToOutput($table);
         return true;

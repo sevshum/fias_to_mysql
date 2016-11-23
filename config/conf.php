@@ -284,8 +284,6 @@ $stead = [
     'DIVTYPE' => 'stead_division_type',
 ];
 return [
-    'outputDirDbf' => __DIR__ . '/../output/',
-    'outputDirXml' => __DIR__ . '/../output_from_xml/',
     'tablesArray' => [
         'OPERSTAT' => [
             'name' => 'operation_statuses',
