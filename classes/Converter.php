@@ -10,7 +10,7 @@ use Monolog\Handler\NativeMailerHandler;
 abstract class Converter
 {
     const LOG_NAME = 'DBF_CONVERTER';
-    const LOG_PATH = '../runtime/app.log';
+    const LOG_PATH = __DIR__ . '/../runtime/app.log';
 
     const MAX_INSERT_LINES = 5000;
 
@@ -72,7 +72,7 @@ abstract class Converter
 
         // create a log channel
         $this->log = new Logger(static::LOG_NAME);
-        $this->log->pushHandler(new StreamHandler(self::LOG_PATH, Logger::WARNING));
+        $this->log->pushHandler(new StreamHandler(self::LOG_PATH));
 //        $this->log->pushHandler(new NativeMailerHandler(
 //            'me@example.com',
 //            'Fias logging. Error occured!',
@@ -108,7 +108,7 @@ abstract class Converter
             $message = "Another file with the name '" . realpath($this->fileName) . "' already exists in the current directory\n";
             $this->log->error($message);
             echo $message;
-            exit;
+            return false;
         }
         /* open the file */
         if ($file = @fopen($this->fileName, "w")) {
@@ -120,11 +120,17 @@ abstract class Converter
             $message = "The file was stored in the '". realpath($this->fileName) ."'\n";
             $this->log->info($message);
             echo $message;
+            return true;
         } else {
             $message = "Can not write to directory\n";
             $this->log->error($message);
             echo $message;
+            return false;
         }
+    }
+
+    protected function getStringSql() {
+        return implode("\n", $this->outputSQL);
     }
 
     protected function createRecords()

@@ -269,6 +269,8 @@ class DbfConverter extends Converter
                 /* If the data type is date we format it for MySQL */
                 return $this->groupDate($index);
                 break;
+            default:
+                return true;
         }
     }
 

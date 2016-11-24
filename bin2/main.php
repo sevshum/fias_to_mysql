@@ -1,5 +1,7 @@
 <?php
 use B3\DbfConverter;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 
 require (__DIR__ . '/../vendor/autoload.php');
 $config = require (__DIR__ . '/../config/conf.php');
@@ -26,5 +28,13 @@ set_time_limit(0);
 //DbfConverter::saveSQL(__DIR__ . '/../../dbf/STRSTAT.DBF', $config['tablesArray'], $config['outputDirDbf']);
 //DbfConverter::saveSQL(__DIR__ . '/../../dbf/HOUSE01.DBF', $config['tablesArray'], $config['outputDirDbf']);
 $fias = new \B3\Fias($config);
+$fias->convertDeltaDB();
+//$fias->convertDeltaDB(\B3\Fias::TYPE_DBF);
 //$fias->convertMainDBDbf();
-$fias->convertMainDBXml();
+//$fias->convertMainDBXml();
+
+//$log = new Logger('fff');
+//$log->pushHandler(new StreamHandler('runtime/app2.log'));
+//$log->info('$message');
+//$log->warning('Foo');
+//$log->error('Bar');

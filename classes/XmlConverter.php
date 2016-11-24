@@ -46,7 +46,7 @@ class XmlConverter extends Converter
     {
         $tables = array_keys($this->tablesArray);
         foreach ($tables as $table) {
-            if (stripos($this->archive, $table) !== false) {
+            if (stripos($this->archive, $table . '_') !== false) {
                 return $this->tablesArray[$table]['name'];
             }
         }
@@ -74,10 +74,26 @@ class XmlConverter extends Converter
 
     public static function saveSQL($archive, $tablesArray, $toDir)
     {
+        if (strtolower(substr($archive, -4, 4)) !== '.xml') {
+            $message = "The file '" . $archive . "' is not xml file\n";
+            echo $message;
+            return true;
+        }
         $xml2sql = new self($archive, $tablesArray);
         if ($xml2sql->convert()) {
-            $xml2sql->saveToFile($toDir);
+            return $xml2sql->saveToFile($toDir);
+
         }
+        return false;
+    }
+
+    public static function getSQL($archive, $tablesArray, $toDir)
+    {
+        $xml2sql = new self($archive, $tablesArray);
+        if ($xml2sql->convert()) {
+            return $xml2sql->getStringSql();
+        }
+        return false;
     }
 
     /*

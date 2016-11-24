@@ -1,0 +1,6 @@
+<?php
+return [
+    'name' => 'fias',
+    'user' => 'name',
+    'pass' => 'pass'
+];

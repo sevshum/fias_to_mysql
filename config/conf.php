@@ -1,4 +1,17 @@
 <?php
+$truncateSql = <<<SQL
+  TRUNCATE TABLE actual_statuses;
+  TRUNCATE TABLE center_status;
+  TRUNCATE TABLE current_status;
+  TRUNCATE TABLE estate_status;
+  TRUNCATE TABLE house_status;
+  TRUNCATE TABLE interv_status;
+  TRUNCATE TABLE norm_doc_type;
+  TRUNCATE TABLE operation_statuses;
+  TRUNCATE TABLE address_object_type;
+  TRUNCATE TABLE structure_status;
+SQL;
+
 $actstat = [
     'ACTSTATID' => 'actual_statuses_id',
     'NAME' => 'actual_statuses_name',
@@ -12,7 +25,6 @@ $addrobj = [
     'CITYCODE' => 'address_object_city_code',
     'CTARCODE' => 'address_object_ctar_code',
     'PLACECODE' => 'address_object_place_code',
-    'PLANCODE' => 'address_object_plain_code',
     'STREETCODE' => 'address_object_street_code',
     'EXTRCODE' => 'address_object_extr_code',
     'SEXTCODE' => 'address_object_sext_code',
@@ -42,7 +54,7 @@ $addrobj = [
     'ENDDATE' => 'address_object_enddate',
     'NORMDOC' => 'address_object_normdoc',
     'CADNUM' => 'address_object_cadastr_num',
-    'DIVTYPE' => 'address_object_cadastr_num',
+    'DIVTYPE' => 'address_object_division_type',
 ];
 $centerst = [
     'CENTERSTID' => 'center_status_id',
@@ -284,6 +296,8 @@ $stead = [
     'DIVTYPE' => 'stead_division_type',
 ];
 return [
+    'truncateSql' => $truncateSql,
+    'db' => require(__DIR__ . '/db.php'),
     'tablesArray' => [
         'OPERSTAT' => [
             'name' => 'operation_statuses',
