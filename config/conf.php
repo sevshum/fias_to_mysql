@@ -303,126 +303,147 @@ return [
             'name' => 'operation_statuses',
             'pk_id' => false,
             'del_where_col' => false,
+            'auxiliary' => true,
             'rowsArray' => $opstat
         ],
         'HOUSE' => [
             'name' => 'house',
             'pk_id' => true,
             'del_where_col' => false,
+            'auxiliary' => false,
             'rowsArray' => $house
         ],
         'DHOUSE' => [
             'name' => 'house',
             'pk_id' => true,
             'del_where_col' => 'HOUSEID',
+            'auxiliary' => false,
             'rowsArray' => $dhouse
         ],
         'HOUSEINT' => [
             'name' => 'house_interval',
             'pk_id' => true,
             'del_where_col' => false,
+            'auxiliary' => false,
             'rowsArray' => $houseint
         ],
         'DHOUSINT' => [
             'name' => 'house_interval',
             'pk_id' => true,
             'del_where_col' => 'INTGUID',
+            'auxiliary' => false,
             'rowsArray' => $dhouseint
         ],
         'ADDROBJ' => [
             'name' => 'address_object',
             'pk_id' => true,
             'del_where_col' => false,
+            'auxiliary' => false,
             'rowsArray' => $addrobj
         ],
         'LANDMARK' => [
             'name' => 'landmark',
             'pk_id' => true,
             'del_where_col' => false,
+            'auxiliary' => false,
             'rowsArray' => $landmark
         ],
         'NORDOC' => [ //check
             'name' => 'norm_doc',
             'pk_id' => true,
             'del_where_col' => false,
+            'auxiliary' => false,
             'rowsArray' => $normdoc
         ],
         'DNORDOC' => [
             'name' => 'norm_doc',
             'pk_id' => true,
             'del_where_col' => 'NORMDOCID',
+            'auxiliary' => false,
             'rowsArray' => $normdoc
         ],
         'HSTSTAT' => [
             'name' => 'house_status',
             'pk_id' => false,
             'del_where_col' => false,
+            'auxiliary' => true,
             'rowsArray' => $hststat
         ],
         'NDOCTYPE' => [
             'name' => 'norm_doc_type',
             'pk_id' => false,
             'del_where_col' => false,
+            'auxiliary' => true,
             'rowsArray' => $ndoctype
         ],
         'INTVSTAT' => [
             'name' => 'interv_status',
             'pk_id' => false,
             'del_where_col' => false,
+            'auxiliary' => true,
             'rowsArray' => $intvstat
         ],
         'CURENTST' => [
             'name' => 'current_status',
             'pk_id' => false,
             'del_where_col' => false,
+            'auxiliary' => true,
             'rowsArray' => $currst
         ],
         'ACTSTAT' => [
             'name' => 'actual_statuses',
             'pk_id' => false,
             'del_where_col' => false,
+            'auxiliary' => true,
             'rowsArray' => $actstat
         ],
         'ESTSTAT' => [
             'name' => 'estate_status',
             'pk_id' => false,
             'del_where_col' => false,
+            'auxiliary' => true,
             'rowsArray' => $eststat
         ],
         'CENTERST' => [
             'name' => 'center_status',
             'pk_id' => false,
             'del_where_col' => false,
+            'auxiliary' => true,
             'rowsArray' => $centerst
         ],
         'STRSTAT' => [
             'name' => 'structure_status',
             'pk_id' => false,
             'del_where_col' => false,
+            'auxiliary' => true,
             'rowsArray' => $strstat
         ],
         'SOCRBASE' => [
             'name' => 'address_object_type',
             'pk_id' => true,
             'del_where_col' => false,
+            'auxiliary' => true,
             'rowsArray' => $socr
         ],
         'DADDROBJ' => [
             'name' => 'address_object',
             'pk_id' => true,
             'del_where_col' => 'AOID',
+            'auxiliary' => false,
             'rowsArray' => $daddrobj
         ],
         'ROOM' => [
             'name' => 'room',
             'pk_id' => true,
             'del_where_col' => false,
+            'auxiliary' => false,
             'rowsArray' => $room
         ],
         'STEAD' => [
             'name' => 'stead',
             'pk_id' => true,
             'del_where_col' => false,
+            'auxiliary' => false,
             'rowsArray' => $stead
         ],
 
@@ -432,127 +453,147 @@ return [
             'name' => 'operation_statuses',
             'pk_id' => false,
             'del_where_col' => false,
+            'auxiliary' => true,
             'rowsArray' => $opstat
         ],
         'AS_HOUSE' => [
             'name' => 'house',
             'pk_id' => true,
             'del_where_col' => false,
+            'auxiliary' => false,
             'rowsArray' => $house
         ],
         'AS_DEL_HOUSE' => [
             'name' => 'house',
             'pk_id' => true,
-            'del_where_col' => '',
+            'del_where_col' => 'HOUSEID',
+            'auxiliary' => false,
             'rowsArray' => $dhouse,
         ],
         'AS_HOUSEINT' => [
             'name' => 'house_interval',
             'pk_id' => true,
             'del_where_col' => false,
+            'auxiliary' => false,
             'rowsArray' => $houseint
         ],
         'AS_DEL_HOUSEINT' => [
             'name' => 'house_interval',
             'pk_id' => true,
             'del_where_col' => 'INTGUID',
+            'auxiliary' => false,
             'rowsArray' => $dhouseint
         ],
         'AS_ADDROBJ' => [
             'name' => 'address_object',
             'pk_id' => true,
             'del_where_col' => false,
+            'auxiliary' => false,
             'rowsArray' => $addrobj
         ],
         'AS_LANDMARK' => [
             'name' => 'landmark',
             'pk_id' => true,
             'del_where_col' => false,
+            'auxiliary' => false,
             'rowsArray' => $landmark
         ],
         'AS_NORMDOC' => [ //check
             'name' => 'norm_doc',
             'pk_id' => true,
             'del_where_col' => false,
-            'name_xml' => 'NormativeDocument',
+            'auxiliary' => false,
             'rowsArray' => $normdoc
         ],
         'AS_DEL_NORMDOC' => [
             'name' => 'donorm_doc',
             'pk_id' => true,
-            'del_where_col' => false,
+            'del_where_col' => 'NORMDOCID',
+            'auxiliary' => false,
             'rowsArray' => $normdoc
         ],
         'AS_HSTSTAT' => [
             'name' => 'house_status',
             'pk_id' => false,
             'del_where_col' => false,
+            'auxiliary' => true,
             'rowsArray' => $hststat
         ],
         'AS_NDOCTYPE' => [
             'name' => 'norm_doc_type',
             'pk_id' => false,
             'del_where_col' => false,
+            'auxiliary' => true,
             'rowsArray' => $ndoctype
         ],
         'AS_INTVSTAT' => [
             'name' => 'interv_status',
             'pk_id' => false,
             'del_where_col' => false,
+            'auxiliary' => true,
             'rowsArray' => $intvstat
         ],
         'AS_CURENTST' => [
             'name' => 'current_status',
             'pk_id' => false,
             'del_where_col' => false,
+            'auxiliary' => true,
             'rowsArray' => $currst
         ],
         'AS_ACTSTAT' => [
             'name' => 'actual_statuses',
             'pk_id' => false,
             'del_where_col' => false,
+            'auxiliary' => true,
             'rowsArray' => $actstat
         ],
         'AS_ESTSTAT' => [
             'name' => 'estate_status',
             'pk_id' => false,
             'del_where_col' => false,
+            'auxiliary' => true,
             'rowsArray' => $eststat
         ],
         'AS_CENTERST' => [
             'name' => 'center_status',
             'pk_id' => false,
             'del_where_col' => false,
+            'auxiliary' => true,
             'rowsArray' => $centerst
         ],
         'AS_STRSTAT' => [
             'name' => 'structure_status',
             'pk_id' => false,
             'del_where_col' => false,
+            'auxiliary' => true,
             'rowsArray' => $strstat
         ],
         'AS_SOCRBASE' => [
             'name' => 'address_object_type',
             'pk_id' => true,
             'del_where_col' => false,
+            'auxiliary' => true,
             'rowsArray' => $socr
         ],
         'AS_DEL_ADDROBJ' => [
             'name' => 'address_object',
             'pk_id' => true,
             'del_where_col' => 'AOID',
+            'auxiliary' => false,
             'rowsArray' => $daddrobj
         ],
         'AS_ROOM' => [
             'name' => 'room',
             'pk_id' => true,
             'del_where_col' => false,
+            'auxiliary' => false,
             'rowsArray' => $room
         ],
         'AS_STEAD' => [
             'name' => 'stead',
             'pk_id' => true,
             'del_where_col' => false,
+            'auxiliary' => false,
             'rowsArray' => $stead
         ]
     ]

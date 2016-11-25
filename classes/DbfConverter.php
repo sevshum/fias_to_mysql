@@ -248,8 +248,8 @@ class DbfConverter extends Converter
                 /* If the data type is alphanumeric we convert the possible characters that affect*/
                 /* convert apostrophes, accents and backslashes */
 
-                $encoding = mb_detect_encoding($this->record[$index], array('cp866'));
-//                $encoding = mb_detect_encoding($this->record[$index], array('windows-1251')); // for nordoc.dbf decode
+//                $encoding = mb_detect_encoding($this->record[$index], array('cp866'));
+                $encoding = mb_detect_encoding($this->record[$index], array('windows-1251')); // for nordoc.dbf decode
                 $this->record[$index] = iconv($encoding,'UTF-8//TRANSLIT//IGNORE',$this->record[$index]);
                 $this->record[$index] = str_replace("'","&apos;",$this->record[$index]);
                 $this->record[$index] = str_replace("\"","&quot;",$this->record[$index]);

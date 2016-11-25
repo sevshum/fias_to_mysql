@@ -14,6 +14,9 @@ class Fias
     const LOG_NAME = 'FIAS_CLASS';
     const LOG_PATH = __DIR__ . '/../runtime/app.log';
 
+    const DELETE_SQL_INDEXES_FILE = __DIR__ . '/../drop_ind.sql';
+    const INSERT_SQL_INDEXES_FILE = __DIR__ . '/../create_ind.sql';
+
     const ENDPOINT = 'http://fias.nalog.ru/Public/Downloads/Actual/';
     const VER_DATE_ENDPOINT = 'http://fias.nalog.ru/Public/Downloads/Actual/VerDate.txt';
     const DBF_DELTA_ENDPOINT = 'http://fias.nalog.ru/Public/Downloads/Actual/fias_delta_dbf.rar';
@@ -111,7 +114,7 @@ class Fias
 //            $this->_convertPartXml($file, self::TABLE_XML_CENTERST);
 //            $this->_convertPartXml($file, self::TABLE_XML_CURENTST);
 //            $this->_convertPartXml($file, self::TABLE_XML_DHOUSE, 12);
-            $this->_convertPartXml($file, self::TABLE_XML_DHOUSEINT, 15);
+//            $this->_convertPartXml($file, self::TABLE_XML_DHOUSEINT, 15);
 //            $this->_convertPartXml($file, self::TABLE_XML_DNORDOC, 14);
 //            $this->_convertPartXml($file, self::TABLE_XML_ESTSTAT);
 //            $this->_convertPartXml($file, self::TABLE_XML_HSTSTAT);
@@ -121,7 +124,7 @@ class Fias
 //            $this->_convertPartXml($file, self::TABLE_XML_OPERSTATE);
 //            $this->_convertPartXml($file, self::TABLE_XML_SOCRBASE);
 //            $this->_convertPartXml($file, self::TABLE_XML_STRSTAT);
-//            $this->_convertPartXml($file, self::TABLE_XML_NORDOC);
+            $this->_convertPartXml($file, self::TABLE_XML_NORDOC);
         }
 
     }
@@ -134,7 +137,7 @@ class Fias
 //            $this->_convertPart($file, self::TABLE_HOUSE);
 //            $this->_convertPart($file, self::TABLE_HOUSEINT, 8);
 //            $this->_convertPart($file, self::TABLE_STEAD);
-            $this->_convertPart($file, self::TABLE_ACTSTAT);
+//            $this->_convertPart($file, self::TABLE_ACTSTAT);
 //            $this->_convertPart($file, self::TABLE_ADDROBJ);
 //            $this->_convertPart($file, self::TABLE_DADDROBJ);
 //            $this->_convertPart($file, self::TABLE_CENTERST);
@@ -150,7 +153,7 @@ class Fias
 //            $this->_convertPart($file, self::TABLE_OPERSTATE);
 //            $this->_convertPart($file, self::TABLE_SOCRBASE);
 //            $this->_convertPart($file, self::TABLE_STRSTAT);
-//            $this->_convertPart($file, self::TABLE_NORDOC);
+            $this->_convertPart($file, self::TABLE_NORDOC);
         }
 
     }
@@ -158,39 +161,90 @@ class Fias
     public function convertDeltaDB($type = self::TYPE_XML)
     {
         if ($this->isNewDelta()) {
-            $this->log->info('There is new delta on fias server');
-            $this->log->info('START handle ' . $type);
+            $this->log->info("There is new delta on fias server\n");
+            $this->log->info('START handle ' . $type . "\n");
             $deltaEndpoint = $type === self::TYPE_XML ? self::XML_DELTA_ENDPOINT : self::DBF_DELTA_ENDPOINT;
             $deltaFileName = $type === self::TYPE_XML ? self::FILE_NAME_XML_DELTA : self::FILE_NAME_DBF_DELTA;
             $deltaInputDir = $type === self::TYPE_XML ? self::INPUT_DIR_XML_DELTA : self::INPUT_DIR_DBF_DELTA;
             $deltaOutputDir = $type === self::TYPE_XML ? self::OUTPUT_DIR_XML_DELTA : self::OUTPUT_DIR_DBF_DELTA;
-//            $this->getFileFromFias($deltaEndpoint, $deltaFileName);
-//            $this->unrarFile($deltaFileName, $deltaInputDir);
-//            $this->delFile($deltaFileName);
+            $this->getFileFromFias($deltaEndpoint, $deltaFileName);
+            $this->unrarFile($deltaFileName, $deltaInputDir);
+            $this->delFile($deltaFileName);
+            $this->delFilesSql($deltaOutputDir);
             $files = scandir($deltaInputDir);
             foreach ($files as $file) {
                 if (!XmlConverter::saveSQL($deltaInputDir . $file, $this->conf['tablesXmlArray'], $deltaOutputDir)) {
                     $this->log->error('Error occured during conversion');
                     echo 'Error occured during conversion';
                     return false;
+                } else {
+                    unlink($deltaInputDir . $file);
                 }
             }
+            $this->deleteSqlIndexes();
             $files = scandir($deltaOutputDir);
-            $this->execSql($this->conf['truncateSql']);
+//            $this->execSql($this->conf['truncateSql']);
             foreach ($files as $file) {
                 if (strtolower(substr($file, -4, 4)) === '.sql') {
 //                $this->execQueryFile($deltaOutputDir . $file);
                     $this->execSqlFile($deltaOutputDir . $file);
                 }
             }
+            $files = scandir($deltaOutputDir . 'delete/');
+            foreach ($files as $file) {
+                if (strtolower(substr($file, -4, 4)) === '.sql') {
+//                $this->execQueryFile($deltaOutputDir . $file);
+                    $this->execSqlFile($deltaOutputDir . $file);
+                }
+            }
+            $this->createSqlIndexes();
             $this->setNewDate();
         } else {
             $this->log->info('There is no new delta on fias server');
-            echo 'There is no new delta on fias server';
+            echo "There is no new delta on fias server\n";
         }
 
     }
 
+    public function deleteSqlIndexes()
+    {
+        $string = 'mysql -u'. $this->conf['db']['user'] . ' -p' . $this->conf['db']['pass'] . ' ' . $this->conf['db']['name'] . ' < ' . self::DELETE_SQL_INDEXES_FILE;
+        exec($string, $output, $return_var);
+        $this->log->info($return_var . ' exec return answer (0 - ok, 1 - error) Delete sql indexes');
+    }
+
+    public function createSqlIndexes()
+    {
+        $string = 'mysql -u'. $this->conf['db']['user'] . ' -p' . $this->conf['db']['pass'] . ' ' . $this->conf['db']['name'] . ' < ' . self::INSERT_SQL_INDEXES_FILE;
+        exec($string, $output, $return_var);
+        $this->log->info($return_var . ' exec return answer (0 - ok, 1 - error) Create sql indexes');
+    }
+
+    protected function delFilesSql($deltaOutputDir)
+    {
+        $files = glob($deltaOutputDir . '*'); // get all file names
+        foreach ($files as $file) { // iterate files
+            if (is_file($file) && strtolower(substr($file, -4, 4)) === '.sql') {
+                unlink($file); // delete file
+            }
+        }
+        $files = glob($deltaOutputDir . 'delete/*'); // get all file names
+        foreach ($files as $file) { // iterate files
+            if (is_file($file) && strtolower(substr($file, -4, 4)) === '.sql') {
+                unlink($file); // delete file
+            }
+        }
+
+        $files = glob($deltaOutputDir . 'auxiliary/*'); // get all file names
+        foreach ($files as $file) { // iterate files
+            if (is_file($file) && strtolower(substr($file, -4, 4)) === '.sql') {
+                unlink($file); // delete file
+            }
+        }
+
+        $this->log->info('Files sql deleted');
+        echo "Files sql deleted\n";
+    }
 
     private function _convertPartXml($file, $table, $length = 7)
     {
@@ -272,9 +326,8 @@ class Fias
     public function execSqlFile($file)
     {
         $string = 'mysql -u'. $this->conf['db']['user'] . ' -p' . $this->conf['db']['pass'] . ' ' . $this->conf['db']['name'] . ' < ' . $file;
-        $res = exec($string);
-        $this->log->info($res);
-        echo $res;
+        exec($string, $output, $return_var);
+        $this->log->info($return_var . ' exec return answer (0 - ok, 1 - error)');
     }
     /**
      * Save file from fias server.

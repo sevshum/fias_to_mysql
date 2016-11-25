@@ -9,7 +9,7 @@ set_time_limit(0);
 //$fias = new \B3\Fias($config);
 //$fias->convertMainDBXml();
 $fias = new \B3\Fias($config);
-$fias->setNewDate();
+$fias->convertDeltaDB();
 
 //$normDocs = simplexml_load_file(__DIR__ . '/../../fias_delta_xml/AS_NORMDOC_20161114_ee40219d-b26b-4feb-b357-d5724965f460.XML');
 //var_dump($normDocs->children()[0]);

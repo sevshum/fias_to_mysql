@@ -99,6 +99,8 @@ abstract class Converter
     {
         if ($this->tablesArray[$this->tableName]['del_where_col']) {
             $this->fileName = $toDir . 'delete/' . $this->name . "DEL.sql";
+        } elseif ($this->tablesArray[$this->tableName]['auxiliary']){
+            $this->fileName = $toDir . 'auxiliary/' . $this->name . ".sql";
         } else {
             $this->fileName = $toDir . $this->name . ".sql";
         }

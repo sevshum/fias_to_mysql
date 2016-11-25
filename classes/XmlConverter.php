@@ -214,6 +214,7 @@ class XmlConverter extends Converter
         return true;
     }
 
+
     protected function closeXml()
     {
         $this->archive = null;
@@ -246,7 +247,8 @@ class XmlConverter extends Converter
 //            }
             foreach ($this->tablesArray[$this->name]['rowsArray'] as $name => $value) {
                 if (isset($item->attributes()[$name])) {
-                    $this->addItem($item->attributes()[$name]);
+                    $val = $this->removeCharacters($item->attributes()[$name]);
+                    $this->addItem($val);
                 } else {
                     $this->addItem('');
                 }
@@ -270,6 +272,15 @@ class XmlConverter extends Converter
         }
 
         return true;
+    }
+
+    protected function removeCharacters($str) {
+        $str = str_replace("'","&apos;",$str);
+        $str = str_replace("\"","&quot;",$str);
+        $str = str_replace("`","&#096;",$str);
+        $str = str_replace("´","&acute;",$str);
+        return str_replace("\\","&#092;",$str);
+
     }
 
     protected function addItem($value)
