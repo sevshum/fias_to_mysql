@@ -4,9 +4,6 @@
     "monolog/monolog":"*"
   },
   "autoload": {
-    "psr-4": {"B3\\": "classes/"},
-    "classmap": [
-      "library/dbf2mysql.php"
-    ]
+    "psr-4": {"B3\\": "classes/"}
   }
 }
