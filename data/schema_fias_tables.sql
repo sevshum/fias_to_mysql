@@ -6,15 +6,15 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 
 -- -----------------------------------------------------
--- Schema fias2
+-- Schema fiasdb
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `fias2` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ;
-USE `fias2` ;
+CREATE SCHEMA IF NOT EXISTS `fiasdb` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ;
+USE `fiasdb` ;
 
 -- -----------------------------------------------------
--- Table `fias2`.`relevance`
+-- Table `fiasdb`.`relevance`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `fias2`.`relevance` (
+CREATE TABLE IF NOT EXISTS `fiasdb`.`relevance` (
   `relevance_id` TINYINT NOT NULL,
   `relevance_name` VARCHAR(20) CHARACTER SET 'utf8' NOT NULL,
   PRIMARY KEY (`relevance_id`))
@@ -23,9 +23,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `fias2`.`norm_doc_type`
+-- Table `fiasdb`.`norm_doc_type`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `fias2`.`norm_doc_type` (
+CREATE TABLE IF NOT EXISTS `fiasdb`.`norm_doc_type` (
   `norm_doc_type_id` TINYINT NOT NULL COMMENT 'Идентификатор записи (ключ)',
   `norm_doc_type_name` VARCHAR(50) CHARACTER SET 'utf8' NOT NULL COMMENT 'Наименование типа нормативного документа',
   PRIMARY KEY (`norm_doc_type_id`))
@@ -35,9 +35,9 @@ COMMENT = 'Тип нормативного документа';
 
 
 -- -----------------------------------------------------
--- Table `fias2`.`norm_doc`
+-- Table `fiasdb`.`norm_doc`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `fias2`.`norm_doc` (
+CREATE TABLE IF NOT EXISTS `fiasdb`.`norm_doc` (
   `norm_doc_id` BIGINT NOT NULL AUTO_INCREMENT,
   `norm_doc_normdoc_id` VARCHAR(36) CHARACTER SET 'utf8' NOT NULL COMMENT 'Идентификатор нормативного документа',
   `norm_doc_doc_imgid` VARCHAR(10) CHARACTER SET 'utf8' NULL DEFAULT NULL COMMENT 'Идентификатор образа (внешний ключ)\nРанее было NOT NULL, но состояло из пустых срок полностью',
@@ -54,9 +54,9 @@ COMMENT = 'Сведения по нормативному документу, я
 
 
 -- -----------------------------------------------------
--- Table `fias2`.`operation_statuses`
+-- Table `fiasdb`.`operation_statuses`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `fias2`.`operation_statuses` (
+CREATE TABLE IF NOT EXISTS `fiasdb`.`operation_statuses` (
   `operation_statuses_id` SMALLINT NOT NULL COMMENT 'Идентификатор статуса (ключ)',
   `operation_statuses_name` VARCHAR(120) CHARACTER SET 'utf8' NOT NULL COMMENT 'Наименование\n',
   PRIMARY KEY (`operation_statuses_id`))
@@ -66,9 +66,9 @@ COMMENT = 'Статус действия';
 
 
 -- -----------------------------------------------------
--- Table `fias2`.`current_status`
+-- Table `fiasdb`.`current_status`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `fias2`.`current_status` (
+CREATE TABLE IF NOT EXISTS `fiasdb`.`current_status` (
   `current_status_id` TINYINT NOT NULL COMMENT 'Идентификатор статуса (ключ)',
   `current_status_name` VARCHAR(20) CHARACTER SET 'utf8' NOT NULL COMMENT 'Наименование (0 - актуальный, 1-50, 2-98 – исторический (кроме 51), 51 - переподчиненный, 99 - несуществующий)',
   PRIMARY KEY (`current_status_id`))
@@ -78,9 +78,9 @@ COMMENT = 'Статус актуальности КЛАДР 4.0';
 
 
 -- -----------------------------------------------------
--- Table `fias2`.`center_status`
+-- Table `fiasdb`.`center_status`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `fias2`.`center_status` (
+CREATE TABLE IF NOT EXISTS `fiasdb`.`center_status` (
   `center_status_id` SMALLINT NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор статуса',
   `center_status_name` VARCHAR(100) NOT NULL COMMENT 'Наименование',
   PRIMARY KEY (`center_status_id`))
@@ -90,9 +90,9 @@ COMMENT = 'содержит перечень возможных статусов
 
 
 -- -----------------------------------------------------
--- Table `fias2`.`actual_statuses`
+-- Table `fiasdb`.`actual_statuses`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `fias2`.`actual_statuses` (
+CREATE TABLE IF NOT EXISTS `fiasdb`.`actual_statuses` (
   `actual_statuses_id` TINYINT NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор статуса (ключ)',
   `actual_statuses_name` VARCHAR(100) NOT NULL COMMENT 'Наименование\n0 – Не актуальный\n1 – Актуальный (последняя запись по адресному объекту)',
   PRIMARY KEY (`actual_statuses_id`))
@@ -102,9 +102,9 @@ COMMENT = 'содержит перечень статусов актуально
 
 
 -- -----------------------------------------------------
--- Table `fias2`.`address_object`
+-- Table `fiasdb`.`address_object`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `fias2`.`address_object` (
+CREATE TABLE IF NOT EXISTS `fiasdb`.`address_object` (
   `address_object_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT 'Уникальный идентификатор записи',
   `address_object_ao_id` VARCHAR(36) NULL COMMENT 'Уникальный идентификатор записи. Ключевое поле.',
   `address_object_guid` VARCHAR(36) CHARACTER SET 'utf8' NOT NULL COMMENT 'Глобальный идентификатор адресного объекта',
@@ -154,9 +154,9 @@ COMMENT = 'Сведения по адресообразующим элемент
 
 
 -- -----------------------------------------------------
--- Table `fias2`.`role`
+-- Table `fiasdb`.`role`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `fias2`.`role` (
+CREATE TABLE IF NOT EXISTS `fiasdb`.`role` (
   `role_id` TINYINT NOT NULL,
   `role_name` VARCHAR(120) CHARACTER SET 'utf8' NOT NULL,
   PRIMARY KEY (`role_id`))
@@ -165,12 +165,12 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `fias2`.`estate_status`
+-- Table `fiasdb`.`estate_status`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `fias2`.`estate_status` (
+CREATE TABLE IF NOT EXISTS `fiasdb`.`estate_status` (
   `estate_status_id` TINYINT NOT NULL,
-  `estate_status_name` VARCHAR(20) CHARACTER SET 'utf8' NOT NULL,
-  `estate_status_short_name` VARCHAR(20) CHARACTER SET 'utf8' NULL DEFAULT NULL,
+  `estate_status_name` VARCHAR(20) CHARACTER SET 'utf8' NOT NULL COMMENT 'Наименование',
+  `estate_status_short_name` VARCHAR(20) CHARACTER SET 'utf8' NULL DEFAULT NULL COMMENT 'Краткое наименование',
   PRIMARY KEY (`estate_status_id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
@@ -178,9 +178,9 @@ COMMENT = 'признакам владения';
 
 
 -- -----------------------------------------------------
--- Table `fias2`.`house_status`
+-- Table `fiasdb`.`house_status`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `fias2`.`house_status` (
+CREATE TABLE IF NOT EXISTS `fiasdb`.`house_status` (
   `house_status_id` TINYINT NOT NULL COMMENT 'Идентификатор статуса',
   `house_status_name` VARCHAR(120) CHARACTER SET 'utf8' NOT NULL COMMENT 'Наименование',
   PRIMARY KEY (`house_status_id`))
@@ -190,11 +190,11 @@ COMMENT = 'Статус состояния домов';
 
 
 -- -----------------------------------------------------
--- Table `fias2`.`structure_status`
+-- Table `fiasdb`.`structure_status`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `fias2`.`structure_status` (
+CREATE TABLE IF NOT EXISTS `fiasdb`.`structure_status` (
   `structure_status_id` TINYINT NOT NULL AUTO_INCREMENT,
-  `structure_status_name` VARCHAR(20) NOT NULL,
+  `structure_status_name` VARCHAR(20) NOT NULL COMMENT 'Наименование',
   `structure_status_shortname` VARCHAR(20) NOT NULL COMMENT 'Краткое наименование',
   PRIMARY KEY (`structure_status_id`))
 ENGINE = InnoDB
@@ -203,9 +203,9 @@ COMMENT = 'Признак строения';
 
 
 -- -----------------------------------------------------
--- Table `fias2`.`house`
+-- Table `fiasdb`.`house`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `fias2`.`house` (
+CREATE TABLE IF NOT EXISTS `fiasdb`.`house` (
   `house_id` BIGINT NOT NULL AUTO_INCREMENT,
   `house_ao_guid` VARCHAR(36) CHARACTER SET 'utf8' NOT NULL COMMENT 'AOGUID - Глобальный уникальный идентификатор адресного объекта. Не смотря на название, уникальным в пределах таблицы он не является. Могут существовать несколько исторический версий и одна единственная актуальная для данного объекта. Подробнее см. раздел \"Статус актуальности\".',
   `house_house_id` VARCHAR(36) CHARACTER SET 'utf8' NOT NULL COMMENT 'Уникальный идентификатор записи дома',
@@ -228,8 +228,8 @@ CREATE TABLE IF NOT EXISTS `fias2`.`house` (
   `house_cadastr_num` VARCHAR(100) NOT NULL COMMENT 'Кадастровый номер',
   `house_division_type` TINYINT NOT NULL COMMENT 'Тип деления: \n0 – не определено\n1 – муниципальное\n2 – административное',
   `house_startdate` DATE NOT NULL DEFAULT '1900-01-01' COMMENT 'Начало действия записи',
-  `house_updatedate` DATE NOT NULL DEFAULT '2011-09-13',
-  `house_enddate` DATE NOT NULL DEFAULT '2079-06-06',
+  `house_updatedate` DATE NOT NULL DEFAULT '2011-09-13' COMMENT 'Дата внесения записи',
+  `house_enddate` DATE NOT NULL DEFAULT '2079-06-06' COMMENT 'Окончание действия записи',
   PRIMARY KEY (`house_id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
@@ -237,9 +237,9 @@ COMMENT = 'Сведения по номерам домов улиц городо
 
 
 -- -----------------------------------------------------
--- Table `fias2`.`interv_status`
+-- Table `fiasdb`.`interv_status`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `fias2`.`interv_status` (
+CREATE TABLE IF NOT EXISTS `fiasdb`.`interv_status` (
   `interv_status_id` TINYINT NOT NULL COMMENT 'Идентификатор статуса (обычный, четный, нечетный)',
   `interv_status_name` VARCHAR(20) CHARACTER SET 'utf8' NOT NULL COMMENT 'Наименование',
   PRIMARY KEY (`interv_status_id`))
@@ -249,9 +249,9 @@ COMMENT = 'Статус интервала домов';
 
 
 -- -----------------------------------------------------
--- Table `fias2`.`house_interval`
+-- Table `fiasdb`.`house_interval`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `fias2`.`house_interval` (
+CREATE TABLE IF NOT EXISTS `fiasdb`.`house_interval` (
   `house_interval_id` BIGINT NOT NULL AUTO_INCREMENT,
   `house_interval_ao_guid` VARCHAR(36) CHARACTER SET 'utf8' NOT NULL COMMENT 'Идентификатор объекта родительского объекта (улицы, города, населенного пункта и т.п.)',
   `house_interval_int_guid` VARCHAR(36) CHARACTER SET 'utf8' NOT NULL COMMENT 'Глобальный уникальный идентификатор интервала домов',
@@ -264,12 +264,12 @@ CREATE TABLE IF NOT EXISTS `fias2`.`house_interval` (
   `house_interval_interval_end` SMALLINT NOT NULL COMMENT 'Значение окончания интервала',
   `house_interval_interval_start` SMALLINT NOT NULL COMMENT 'Значение начала интервала',
   `house_interval_int_status` TINYINT NOT NULL DEFAULT 1 COMMENT 'Статус интервала (обычный, четный, нечетный),\n принимает значения 1, 2, 3, больше всего 1',
-  `house_interval_okato` BIGINT NULL DEFAULT NULL,
-  `house_interval_oktmo` BIGINT NULL DEFAULT NULL,
+  `house_interval_okato` BIGINT NULL DEFAULT NULL COMMENT 'Код по справочнику ОКАТО',
+  `house_interval_oktmo` BIGINT NULL DEFAULT NULL COMMENT 'Код по справочнику ОКТМО',
   `house_interval_postal_code` INT NULL DEFAULT NULL COMMENT 'Почтовый код',
   `house_interval_counter` TINYINT NOT NULL DEFAULT 1 COMMENT 'Счётчик записей домов для КЛАДР 4 чаще всего встречается ',
   `house_interval_startdate` DATE NOT NULL DEFAULT '1900-01-01' COMMENT 'Дата начала записи',
-  `house_interval_updatedate` DATE NOT NULL DEFAULT '2011-09-13',
+  `house_interval_updatedate` DATE NOT NULL DEFAULT '2011-09-13' COMMENT 'Дата внесения записи',
   `house_interval_enddate` DATE NOT NULL DEFAULT '2079-06-06' COMMENT 'Окончание действия записи',
   PRIMARY KEY (`house_interval_id`))
 ENGINE = InnoDB
@@ -279,25 +279,25 @@ COMMENT = 'Интервалы домов';
 
 
 -- -----------------------------------------------------
--- Table `fias2`.`landmark`
+-- Table `fiasdb`.`landmark`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `fias2`.`landmark` (
+CREATE TABLE IF NOT EXISTS `fiasdb`.`landmark` (
   `landmark_id` BIGINT NOT NULL AUTO_INCREMENT,
-  `landmark_ao_guid` VARCHAR(36) CHARACTER SET 'utf8' NOT NULL,
+  `landmark_ao_guid` VARCHAR(36) CHARACTER SET 'utf8' NOT NULL COMMENT 'Идентификатор объекта родительского объекта',
   `landmark_land_id` VARCHAR(36) CHARACTER SET 'utf8' NOT NULL COMMENT 'Уникальный идентификатор записи ориентира',
   `landmark_land_guid` VARCHAR(36) CHARACTER SET 'utf8' NOT NULL COMMENT 'Глобальный уникальный идентификатор ориентира',
-  `landmark_normdoc` VARCHAR(36) CHARACTER SET 'utf8' NOT NULL,
+  `landmark_normdoc` VARCHAR(36) CHARACTER SET 'utf8' NOT NULL COMMENT 'Внешний ключ на нормативный документ',
   `landmark_ifns_fiz_li` SMALLINT NULL DEFAULT NULL COMMENT 'Код ИФНС ФЛ',
   `landmark_ifns_ur_li` SMALLINT NULL DEFAULT NULL COMMENT 'Код ИФНС ЮЛ',
   `landmark_terr_ifns_fiz_li` SMALLINT NULL DEFAULT NULL COMMENT 'Код территориального участка ФЛ',
   `landmark_terr_ifns_ur_li` SMALLINT NULL DEFAULT NULL COMMENT 'Код территориального участка ЮЛ',
   `landmark_location` TEXT(500) CHARACTER SET 'utf8' NULL DEFAULT NULL COMMENT 'Местоположение ориентира',
-  `landmark_okato` BIGINT NULL DEFAULT NULL COMMENT 'код ОКАТО',
-  `landmark_oktmo` INT NULL DEFAULT NULL,
+  `landmark_okato` BIGINT NULL DEFAULT NULL  COMMENT 'Код по справочнику ОКАТО',
+  `landmark_oktmo` INT NULL DEFAULT NULL COMMENT 'Код по справочнику ОКТМО',
   `landmark_postal_code` BIGINT NULL DEFAULT NULL COMMENT 'Почтовый код',
   `landmark_startdate` DATE NOT NULL DEFAULT '1900-01-01' COMMENT 'Дата начала записи',
-  `landmark_updatedate` DATE NOT NULL DEFAULT '2011-09-13',
-  `landmark_enddate` DATE NOT NULL DEFAULT '2079-06-06',
+  `landmark_updatedate` DATE NOT NULL DEFAULT '2011-09-13' COMMENT 'Дата внесения записи',
+  `landmark_enddate` DATE NOT NULL DEFAULT '2079-06-06' COMMENT 'Окончание действия записи',
   PRIMARY KEY (`landmark_id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
@@ -306,9 +306,9 @@ COMMENT = 'Описание мест расположения  имуществ�
 
 
 -- -----------------------------------------------------
--- Table `fias2`.`address_object_type`
+-- Table `fiasdb`.`address_object_type`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `fias2`.`address_object_type` (
+CREATE TABLE IF NOT EXISTS `fiasdb`.`address_object_type` (
   `address_object_type_level` TINYINT NOT NULL COMMENT 'Уровень адресного объекта',
   `address_object_type_name` VARCHAR(120) CHARACTER SET 'utf8' NULL DEFAULT NULL COMMENT 'Полное наименование типа объекта',
   `address_object_type_short_name` VARCHAR(20) CHARACTER SET 'utf8' NULL DEFAULT NULL COMMENT 'Краткое наименование типа объекта',
@@ -321,9 +321,9 @@ COMMENT = 'Тип адресного объекта';
 
 
 -- -----------------------------------------------------
--- Table `fias2`.`room`
+-- Table `fiasdb`.`room`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `fias2`.`room` (
+CREATE TABLE IF NOT EXISTS `fiasdb`.`room` (
   `room_id` BIGINT NOT NULL AUTO_INCREMENT,
   `room_room_id` VARCHAR(36) NOT NULL COMMENT 'Уникальный идентификатор записи. Ключевое поле.',
   `room_gu_id` VARCHAR(36) NOT NULL COMMENT 'Глобальный уникальный идентификатор адресного объекта (помещения)',
@@ -351,9 +351,9 @@ COMMENT = 'Классификатор помещениях';
 
 
 -- -----------------------------------------------------
--- Table `fias2`.`stead`
+-- Table `fiasdb`.`stead`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `fias2`.`stead` (
+CREATE TABLE IF NOT EXISTS `fiasdb`.`stead` (
   `stead_id` BIGINT NOT NULL AUTO_INCREMENT,
   `stead_gu_id` VARCHAR(36) NOT NULL COMMENT 'Глобальный уникальный идентификатор адресного объекта (земельного участка)',
   `stead_stead_id` VARCHAR(36) NOT NULL COMMENT 'Уникальный идентификатор записи. Ключевое поле.',
@@ -368,8 +368,8 @@ CREATE TABLE IF NOT EXISTS `fias2`.`stead` (
   `stead_ifns_ur_li` SMALLINT NULL COMMENT 'Код ИФНС ЮЛ',
   `stead_terr_ifns_fiz_li` SMALLINT NULL COMMENT 'Код территориального участка ИФНС ФЛ',
   `stead_terr_ifns_ur_li` SMALLINT NULL COMMENT 'Код территориального участка ИФНС ЮЛ',
-  `stead_okato` BIGINT NULL,
-  `stead_oktmo` BIGINT NULL,
+  `stead_okato` BIGINT NULL COMMENT 'Код по справочнику ОКАТО',
+  `stead_oktmo` BIGINT NULL COMMENT 'Код по справочнику ОКТМО',
   `stead_oper_status` SMALLINT NOT NULL COMMENT 'Статус действия над записью – причина появления записи (см. описание таблицы OperationStatus)',
   `stead_live_status` TINYINT NOT NULL COMMENT 'Признак действующего адресного объекта',
   `stead_cadastr_num` VARCHAR(100) NULL COMMENT 'Кадастровый номер',
@@ -384,16 +384,16 @@ DEFAULT CHARACTER SET = utf8
 COMMENT = 'Классификатор земельных участков';
 
 -- -----------------------------------------------------
--- Table `fias2`.`last_update`
+-- Table `fiasdb`.`last_update`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `fias2`.`last_update` (
+CREATE TABLE IF NOT EXISTS `fiasdb`.`last_update` (
   `last_update_id` INT NOT NULL AUTO_INCREMENT,
-  `last_update_date` DATE NULL,
+  `last_update_date` DATE NULL COMMENT 'Дата последнего обновления дельты ФИАС',
   PRIMARY KEY (`last_update_id`))
 ENGINE = InnoDB
 COMMENT = 'Временные метки обновлений';
 
--- INSERT IGNORE INTO `fias2`.`last_update` (last_update_id, last_update_date) VALUES ('0', '2016-11-17');
+-- INSERT IGNORE INTO `fiasdb`.`last_update` (last_update_id, last_update_date) VALUES ('0', '2016-11-17');
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

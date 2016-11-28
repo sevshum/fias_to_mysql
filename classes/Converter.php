@@ -75,7 +75,7 @@ abstract class Converter
         $this->log->pushHandler(new StreamHandler(self::LOG_PATH));
 //        $this->log->pushHandler(new NativeMailerHandler(
 //            'me@example.com',
-//            'Fias logging. Error occured!',
+//            'Fias logging. Error occurred!',
 //            'Fias logging'
 //        ));
 

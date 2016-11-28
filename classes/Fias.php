@@ -14,8 +14,9 @@ class Fias
     const LOG_NAME = 'FIAS_CLASS';
     const LOG_PATH = __DIR__ . '/../runtime/app.log';
 
-    const DELETE_SQL_INDEXES_FILE = __DIR__ . '/../drop_ind.sql';
-    const INSERT_SQL_INDEXES_FILE = __DIR__ . '/../create_ind.sql';
+    const DELETE_SQL_INDEXES_FILE = __DIR__ . '/../data/drop_ind.sql';
+    const INSERT_SQL_INDEXES_FILE = __DIR__ . '/../data/create_ind.sql';
+    const DUMP_FILE_DIR = __DIR__ . '/../data/dump/';
 
     const ENDPOINT = 'http://fias.nalog.ru/Public/Downloads/Actual/';
     const VER_DATE_ENDPOINT = 'http://fias.nalog.ru/Public/Downloads/Actual/VerDate.txt';
@@ -94,7 +95,7 @@ class Fias
         $this->log->pushHandler(new StreamHandler(self::LOG_PATH));
 //        $this->log->pushHandler(new NativeMailerHandler(
 //            'me@example.com',
-//            'Fias logging. Error occured!',
+//            'Fias logging. Error occurred!',
 //            'Fias logging'
 //        ));
         $this->conf = $conf;
@@ -161,6 +162,10 @@ class Fias
     public function convertDeltaDB($type = self::TYPE_XML)
     {
         if ($this->isNewDelta()) {
+            $this->delDump();
+            if (!$this->dumpDb()) {
+                return false;
+            }
             $this->log->info("There is new delta on fias server\n");
             $this->log->info('START handle ' . $type . "\n");
             $deltaEndpoint = $type === self::TYPE_XML ? self::XML_DELTA_ENDPOINT : self::DBF_DELTA_ENDPOINT;
@@ -168,20 +173,25 @@ class Fias
             $deltaInputDir = $type === self::TYPE_XML ? self::INPUT_DIR_XML_DELTA : self::INPUT_DIR_DBF_DELTA;
             $deltaOutputDir = $type === self::TYPE_XML ? self::OUTPUT_DIR_XML_DELTA : self::OUTPUT_DIR_DBF_DELTA;
             $this->getFileFromFias($deltaEndpoint, $deltaFileName);
-            $this->unrarFile($deltaFileName, $deltaInputDir);
+            if (!$this->unrarFile($deltaFileName, $deltaInputDir)) {
+                return false;
+            }
             $this->delFile($deltaFileName);
             $this->delFilesSql($deltaOutputDir);
             $files = scandir($deltaInputDir);
             foreach ($files as $file) {
-                if (!XmlConverter::saveSQL($deltaInputDir . $file, $this->conf['tablesXmlArray'], $deltaOutputDir)) {
-                    $this->log->error('Error occured during conversion');
-                    echo 'Error occured during conversion';
+                $res = $type === self::TYPE_XML ? XmlConverter::saveSQL($deltaInputDir . $file, $this->conf['tablesXmlArray'], $deltaOutputDir) : DbfConverter::saveSQL($deltaInputDir . $file, $this->conf['tablesArray'], $deltaOutputDir);
+                if (!$res) {
+                    $this->log->error('Error occurred during conversion');
+                    echo 'Error occurred during conversion';
                     return false;
                 } else {
                     unlink($deltaInputDir . $file);
                 }
             }
-            $this->deleteSqlIndexes();
+            if (!$this->deleteSqlIndexes()) {
+                return false;
+            }
             $files = scandir($deltaOutputDir);
 //            $this->execSql($this->conf['truncateSql']);
             foreach ($files as $file) {
@@ -194,7 +204,7 @@ class Fias
             foreach ($files as $file) {
                 if (strtolower(substr($file, -4, 4)) === '.sql') {
 //                $this->execQueryFile($deltaOutputDir . $file);
-                    $this->execSqlFile($deltaOutputDir . $file);
+                    $this->execSqlFile($deltaOutputDir . 'delete/' . $file);
                 }
             }
             $this->createSqlIndexes();
@@ -203,21 +213,73 @@ class Fias
             $this->log->info('There is no new delta on fias server');
             echo "There is no new delta on fias server\n";
         }
-
+        return true;
     }
 
     public function deleteSqlIndexes()
     {
         $string = 'mysql -u'. $this->conf['db']['user'] . ' -p' . $this->conf['db']['pass'] . ' ' . $this->conf['db']['name'] . ' < ' . self::DELETE_SQL_INDEXES_FILE;
         exec($string, $output, $return_var);
-        $this->log->info($return_var . ' exec return answer (0 - ok, 1 - error) Delete sql indexes');
+        if ($return_var === 0) {
+            $msg = $return_var . "; Delete sql indexes: Success\n";
+            $this->log->info($msg);
+            echo $msg;
+            return true;
+        } else {
+            $msg = $return_var . "; Delete sql indexes: Error\n";
+            $this->log->error($msg);
+            echo $msg;
+            return false;
+        }
     }
 
     public function createSqlIndexes()
     {
         $string = 'mysql -u'. $this->conf['db']['user'] . ' -p' . $this->conf['db']['pass'] . ' ' . $this->conf['db']['name'] . ' < ' . self::INSERT_SQL_INDEXES_FILE;
         exec($string, $output, $return_var);
-        $this->log->info($return_var . ' exec return answer (0 - ok, 1 - error) Create sql indexes');
+        if ($return_var === 0) {
+            $msg = $return_var . "; Create sql indexes: Success\n";
+            $this->log->info($msg);
+            echo $msg;
+            return true;
+        } else {
+            $msg = $return_var . "; Create sql indexes: Error\n";
+            $this->log->error($msg);
+            echo $msg;
+            return false;
+        }
+    }
+
+    public function delDump()
+    {
+        foreach (glob(self::DUMP_FILE_DIR . "*.gz") as $filename) {
+            if (is_file($filename)) {
+                unlink($filename); // delete file
+                $msg = 'Old mysql dump ' . realpath($filename) . " was deleted!\n";
+                $this->log->info($msg);
+                echo $msg;
+            }
+        }
+
+//        $this->log->info($return_var . '; exec return answer (0 - ok, 1 - error) Dump database');
+    }
+
+    public function dumpDb()
+    {
+        $string = 'mysqldump --no-create-info --complete-insert -u'. $this->conf['db']['user'] . ' -p' . $this->conf['db']['pass'] . ' ' . $this->conf['db']['name'] . ' | gzip > ' . self::DUMP_FILE_DIR . '`date +fias.%Y%m%d.%H%M%S.sql.gz`';
+        exec($string, $output, $return_var);
+        if ($return_var === 0) {
+            $msg = $return_var . "; Dump database: Success\n";
+            $this->log->info($msg);
+            echo $msg;
+            return true;
+        } else {
+            $msg = $return_var . "; Dump database: Error\n";
+            $this->log->error($msg);
+            echo $msg;
+            return false;
+        }
+
     }
 
     protected function delFilesSql($deltaOutputDir)
@@ -264,11 +326,13 @@ class Fias
         $dateStr = file_get_contents(self::VER_DATE_ENDPOINT);
         $newDate = new DateTime($dateStr);
         $newDate = $newDate->format('Y-m-d');
-        echo $newDate;
         $pdo = $this->_pdoInit();
         $stmt = $pdo->prepare("INSERT INTO last_update (last_update_date) VALUES (:value)");
         $stmt->bindParam(':value', $newDate);
         $stmt->execute();
+        $msg = "New date $newDate was stored in the DB \n";
+        $this->log->info($msg);
+        echo $msg;
     }
 
     public function isNewDelta()
@@ -327,7 +391,17 @@ class Fias
     {
         $string = 'mysql -u'. $this->conf['db']['user'] . ' -p' . $this->conf['db']['pass'] . ' ' . $this->conf['db']['name'] . ' < ' . $file;
         exec($string, $output, $return_var);
-        $this->log->info($return_var . ' exec return answer (0 - ok, 1 - error)');
+        if ($return_var === 0) {
+            $msg = $return_var . "; Execute sql file $file: Success\n";
+            $this->log->info($msg);
+            echo $msg;
+            return true;
+        } else {
+            $msg = $return_var . "; Execute sql file $file: Error\n";
+            $this->log->error($msg);
+            echo $msg;
+            return false;
+        }
     }
     /**
      * Save file from fias server.
@@ -361,14 +435,24 @@ class Fias
     public function unrarFile($file = self::FILE_NAME_XML_DELTA, $outputDir = self::INPUT_DIR_XML_DELTA)
     {
         $string = "unrar x -y '$file' '$outputDir'";
-        if (exec($string) === "All OK") {
+        exec($string, $output, $return_var);
+        if ($return_var === 0) {
+            $msg = $return_var . "; Unrar file: Success\n";
+            $this->log->info($msg);
+            echo $msg;
             return true;
+        } else {
+            $msg = $return_var . "; Unrar file: Error\n";
+            $this->log->error($msg);
+            echo $msg;
+            return false;
         }
-        return false;
     }
 
     public function delFile($file = self::FILE_NAME_XML_DELTA)
     {
-        unlink($file);
+        if (is_file($file)) {
+            unlink($file); // delete file
+        }
     }
 }

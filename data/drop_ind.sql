@@ -93,7 +93,7 @@ DROP INDEX `fk_house_interval_address_object_idx` ON `fiasdb`.`house_interval`;
 -- DROP INDEX `fk_house_interval_interv_status_idx` ON `fiasdb`.`house_interval`;
 
 -- house table
--- DROP INDEX `h_guid_idx` ON `fiasdb`.`house`;
+DROP INDEX `h_guid_idx` ON `fiasdb`.`house`;
 -- DROP INDEX `h_id_idx` ON `fiasdb`.`house`;
 -- DROP INDEX `fk_house_estate_status_idx` ON `fiasdb`.`house`;
 -- DROP INDEX `fk_house_norm_doc_idx` ON `fiasdb`.`house`;
@@ -112,6 +112,8 @@ DROP INDEX `ao_guid_idx` ON `fiasdb`.`address_object`;
 DROP INDEX `ao_parent_guid_idx` ON `fiasdb`.`address_object`;
 DROP INDEX `ao_next_id_idx` ON `fiasdb`.`address_object`;
 DROP INDEX `ao_prev_id_idx` ON `fiasdb`.`address_object`;
+DROP INDEX `ao_formal_name_idx` ON `fiasdb`.`address_object`;
+
 -- DROP INDEX `ao_ao_id` ON `fiasdb`.`address_object`;
 -- DROP INDEX `fk_address_object_norm_doc_idx` ON `fiasdb`.`address_object`;
 -- DROP INDEX `fk_address_object_operation_status_idx` ON `fiasdb`.`address_object`;

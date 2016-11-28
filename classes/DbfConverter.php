@@ -61,10 +61,16 @@ class DbfConverter extends Converter
 
     public static function saveSQL($archive, $tablesArray, $toDir)
     {
+        if (strtolower(substr($archive, -4, 4)) !== '.dbf') {
+            $message = "The file '" . $archive . "' is not dbf file\n";
+            echo $message;
+            return true;
+        }
         $dbf2sql = new self($archive, $tablesArray);
         if ($dbf2sql->convert()) {
-            $dbf2sql->saveToFile($toDir);
+            return $dbf2sql->saveToFile($toDir);
         }
+        return false;
     }
 
     /*

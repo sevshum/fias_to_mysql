@@ -32,7 +32,7 @@ CREATE INDEX `fk_house_interval_address_object_idx` ON `fiasdb`.`house_interval`
 
 -- house table
 
--- CREATE INDEX `h_guid_idx` ON `fiasdb`.`house` (`house_house_guid` ASC);
+CREATE INDEX `h_guid_idx` ON `fiasdb`.`house` (`house_house_guid` ASC);
 -- CREATE INDEX `h_id_idx` ON `fiasdb`.`house` (`house_house_id` ASC);
 -- CREATE INDEX `fk_house_estate_status_idx` ON `fiasdb`.`house` (`house_estate_status` ASC);
 -- CREATE INDEX `fk_house_norm_doc_idx` ON `fiasdb`.`house` (`house_normdoc` ASC);
@@ -50,6 +50,7 @@ CREATE INDEX `ao_guid_idx` ON `fiasdb`.`address_object` (`address_object_guid` A
 CREATE INDEX `ao_parent_guid_idx` ON `fiasdb`.`address_object` (`address_object_parent_guid` ASC);
 CREATE INDEX `ao_next_id_idx` ON `fiasdb`.`address_object` (`address_object_next_id` ASC);
 CREATE INDEX `ao_prev_id_idx` ON `fiasdb`.`address_object` (`address_object_prev_id` ASC);
+CREATE FULLTEXT INDEX `ao_formal_name_idx` ON `fiasdb`.`address_object` (`address_object_formal_name` ASC);
 -- CREATE INDEX `ao_ao_id` ON `fiasdb`.`address_object` (`address_object_ao_id` ASC);
 -- CREATE INDEX `fk_address_object_norm_doc_idx` ON `fiasdb`.`address_object` (`address_object_normdoc` ASC);
 -- CREATE INDEX `fk_address_object_operation_status_idx` ON `fiasdb`.`address_object` (`address_object_operation_status` ASC);
