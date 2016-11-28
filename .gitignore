@@ -25,6 +25,8 @@ dbf_delta/*
 !dbf_delta/.gitkeep
 fias_xml_delta/*
 !fias_xml_delta/.gitkeep
+data/dump/*
+!data/dump/.gitkeep
 
 runtime/*
 !runtime/.gitkeep
