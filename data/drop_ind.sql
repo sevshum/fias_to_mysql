@@ -69,6 +69,9 @@ ALTER TABLE `fiasdb`.`house`
 -- ALTER TABLE `fiasdb`.`norm_doc`
 --   DROP FOREIGN KEY `fk_norm_doc_norm_doc_type`;
 
+-- ALTER TABLE `fiasdb`.`federal_district_region`
+--   DROP FOREIGN KEY `fk_federal_district_region_federal_district`;
+
 -- stead table
 DROP INDEX `fk_stead_address_object_idx` ON `fiasdb`.`stead`;
 -- DROP INDEX `fk_stead_oper_status_idx` ON `fiasdb`.`stead`;
@@ -109,6 +112,7 @@ DROP INDEX `nd_normdoc_id_idx` ON `fiasdb`.`norm_doc`;
 
 -- address_object table
 DROP INDEX `ao_guid_idx` ON `fiasdb`.`address_object`;
+DROP INDEX `ao_region_code_idx` ON `fiasdb`.`address_object`;
 DROP INDEX `ao_parent_guid_idx` ON `fiasdb`.`address_object`;
 DROP INDEX `ao_next_id_idx` ON `fiasdb`.`address_object`;
 DROP INDEX `ao_prev_id_idx` ON `fiasdb`.`address_object`;

@@ -395,6 +395,132 @@ COMMENT = 'Временные метки обновлений';
 
 -- INSERT IGNORE INTO `fiasdb`.`last_update` (last_update_id, last_update_date) VALUES ('0', '2016-11-17');
 
+-- -----------------------------------------------------
+-- Table `fiasdb`.`last_update`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `fiasdb`.`federal_district` (
+  `federal_district_id` INT NOT NULL AUTO_INCREMENT,
+  `federal_district_name` VARCHAR(63) NOT NULL COMMENT 'Наименование федерального округа',
+  `federal_district_short_name` VARCHAR(31) NOT NULL COMMENT 'Наименование федерального округа сокращенное',
+  PRIMARY KEY (`federal_district_id`))
+ENGINE = InnoDB
+COMMENT = 'Федеральные округа';
+-- INSERT INTO `fiasdb`.`federal_district` (federal_district_id, federal_district_name, federal_district_short_name) VALUES (1, 'Центральный федеральный округ', 'Центральный ФО');
+-- INSERT INTO `fiasdb`.`federal_district` (federal_district_id, federal_district_name, federal_district_short_name) VALUES (2, 'Северо-Западный федеральный округ', 'Северо-Западный ФО');
+-- INSERT INTO `fiasdb`.`federal_district` (federal_district_id, federal_district_name, federal_district_short_name) VALUES (3, 'Южный федеральный округ', 'Южный ФО');
+-- INSERT INTO `fiasdb`.`federal_district` (federal_district_id, federal_district_name, federal_district_short_name) VALUES (4, 'Северо-Кавказский федеральный округ', 'Северо-Кавказский ФО');
+-- INSERT INTO `fiasdb`.`federal_district` (federal_district_id, federal_district_name, federal_district_short_name) VALUES (5, 'Приволжский федеральный округ', 'Приволжский ФО');
+-- INSERT INTO `fiasdb`.`federal_district` (federal_district_id, federal_district_name, federal_district_short_name) VALUES (6, 'Уральский федеральный округ', 'Уральский ФО');
+-- INSERT INTO `fiasdb`.`federal_district` (federal_district_id, federal_district_name, federal_district_short_name) VALUES (7, 'Сибирский федеральный округ', 'Сибирский ФО');
+-- INSERT INTO `fiasdb`.`federal_district` (federal_district_id, federal_district_name, federal_district_short_name) VALUES (8, 'Дальневосточный федеральный округ', 'Дальневосточный ФО');
+
+CREATE TABLE IF NOT EXISTS `fiasdb`.`federal_district_region` (
+  `federal_district_region_district_id` INT NOT NULL,
+  `federal_district_region_region_id` INT NOT NULL,
+  PRIMARY KEY (`federal_district_region_district_id`, `federal_district_region_region_id`))
+ENGINE = InnoDB
+COMMENT = 'Промежуточная таблица связи федеральных округов и регионов';
+
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (1, 31); -- центр
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (1, 32); -- центр
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (1, 33); -- центр
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (1, 36); -- центр
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (1, 37); -- центр
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (1, 40); -- центр
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (1, 44); -- центр
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (1, 46); -- центр
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (1, 48); -- центр
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (1, 50); -- центр
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (1, 57); -- центр
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (1, 62); -- центр
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (1, 67); -- центр
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (1, 68); -- центр
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (1, 69); -- центр
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (1, 71); -- центр
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (1, 76); -- центр
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (1, 77); -- центр
+--
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (2, 10); -- Северо-Западный
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (2, 11); -- Северо-Западный
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (2, 29); -- Северо-Западный
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (2, 35); -- Северо-Западный
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (2, 39); -- Северо-Западный
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (2, 47); -- Северо-Западный
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (2, 51); -- Северо-Западный
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (2, 53); -- Северо-Западный
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (2, 60); -- Северо-Западный
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (2, 78); -- Северо-Западный
+--
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (3, 1); -- Южный
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (3, 8); -- Южный
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (3, 23); -- Южный
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (3, 30); -- Южный
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (3, 34); -- Южный
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (3, 61); -- Южный
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (3, 91); -- Южный
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (3, 99); -- Южный
+--
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (4, 5); -- Северо-Кавказский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (4, 6); -- Северо-Кавказский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (4, 7); -- Северо-Кавказский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (4, 9); -- Северо-Кавказский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (4, 15); -- Северо-Кавказский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (4, 20); -- Северо-Кавказский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (4, 26); -- Северо-Кавказский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (4, 83); -- Северо-Кавказский
+--
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (5, 2); -- Приволжский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (5, 12); -- Приволжский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (5, 13); -- Приволжский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (5, 16); -- Приволжский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (5, 18); -- Приволжский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (5, 21); -- Приволжский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (5, 43); -- Приволжский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (5, 52); -- Приволжский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (5, 56); -- Приволжский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (5, 58); -- Приволжский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (5, 59); -- Приволжский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (5, 63); -- Приволжский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (5, 64); -- Приволжский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (5, 73); -- Приволжский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (5, 81); -- Приволжский
+--
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (6, 45); -- Уральский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (6, 66); -- Уральский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (6, 72); -- Уральский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (6, 74); -- Уральский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (6, 86); -- Уральский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (6, 89); -- Уральский
+--
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (7, 3); -- Сибирский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (7, 4); -- Сибирский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (7, 17); -- Сибирский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (7, 19); -- Сибирский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (7, 22); -- Сибирский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (7, 24); -- Сибирский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (7, 38); -- Сибирский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (7, 42); -- Сибирский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (7, 54); -- Сибирский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (7, 55); -- Сибирский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (7, 70); -- Сибирский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (7, 75); -- Сибирский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (7, 80); -- Сибирский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (7, 84); -- Сибирский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (7, 85); -- Сибирский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (7, 88); -- Сибирский
+--
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (8, 14); -- Дальневосточный
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (8, 25); -- Дальневосточный
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (8, 27); -- Дальневосточный
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (8, 28); -- Дальневосточный
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (8, 41); -- Дальневосточный
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (8, 49); -- Дальневосточный
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (8, 65); -- Дальневосточный
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (8, 79); -- Дальневосточный
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (8, 82); -- Дальневосточный
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (8, 87); -- Дальневосточный
+
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

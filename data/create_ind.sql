@@ -51,6 +51,7 @@ CREATE INDEX `ao_parent_guid_idx` ON `fiasdb`.`address_object` (`address_object_
 CREATE INDEX `ao_next_id_idx` ON `fiasdb`.`address_object` (`address_object_next_id` ASC);
 CREATE INDEX `ao_prev_id_idx` ON `fiasdb`.`address_object` (`address_object_prev_id` ASC);
 CREATE FULLTEXT INDEX `ao_formal_name_idx` ON `fiasdb`.`address_object` (`address_object_formal_name` ASC);
+CREATE INDEX `ao_region_code_idx` ON `fiasdb`.`address_object` (`address_object_region_code` ASC);
 -- CREATE INDEX `ao_ao_id` ON `fiasdb`.`address_object` (`address_object_ao_id` ASC);
 -- CREATE INDEX `fk_address_object_norm_doc_idx` ON `fiasdb`.`address_object` (`address_object_normdoc` ASC);
 -- CREATE INDEX `fk_address_object_operation_status_idx` ON `fiasdb`.`address_object` (`address_object_operation_status` ASC);
@@ -211,6 +212,16 @@ ALTER TABLE `fiasdb`.`house`
 --     REFERENCES `fiasdb`.`actual_statuses` (`actual_statuses_id`)
 --     ON DELETE NO ACTION
 --     ON UPDATE NO ACTION;
+
+
+
+-- ALTER TABLE `fiasdb`.`federal_district_region`
+--   ADD CONSTRAINT `fk_federal_district_region_federal_district`
+--     FOREIGN KEY (`federal_district_region_district_id`)
+--     REFERENCES `fiasdb`.`federal_district` (`federal_district_id`)
+--     ON DELETE NO ACTION
+--     ON UPDATE NO ACTION;
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
