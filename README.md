@@ -69,3 +69,15 @@ service php7.0-fpm restart
 
 # unrar
 sudo apt-get install unrar
+
+
+
+
+
+
+
+
+
+ls -1 *.sql | awk '{ print "source",$0 }' | mysql --batch -u root -p fiasdb
+
+mysqldump --no-create-info --complete-insert -u root -p fiasdb | gzip > `date +fias.%Y%m%d.%H%M%S.sql.gz`
