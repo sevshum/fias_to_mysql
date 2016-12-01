@@ -396,7 +396,7 @@ COMMENT = 'Временные метки обновлений';
 -- INSERT IGNORE INTO `fiasdb`.`last_update` (last_update_id, last_update_date) VALUES ('0', '2016-11-17');
 
 -- -----------------------------------------------------
--- Table `fiasdb`.`last_update`
+-- Table `fiasdb`.`federal_district`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `fiasdb`.`federal_district` (
   `federal_district_id` INT NOT NULL AUTO_INCREMENT,
@@ -413,6 +413,7 @@ COMMENT = 'Федеральные округа';
 -- INSERT INTO `fiasdb`.`federal_district` (federal_district_id, federal_district_name, federal_district_short_name) VALUES (6, 'Уральский федеральный округ', 'Уральский ФО');
 -- INSERT INTO `fiasdb`.`federal_district` (federal_district_id, federal_district_name, federal_district_short_name) VALUES (7, 'Сибирский федеральный округ', 'Сибирский ФО');
 -- INSERT INTO `fiasdb`.`federal_district` (federal_district_id, federal_district_name, federal_district_short_name) VALUES (8, 'Дальневосточный федеральный округ', 'Дальневосточный ФО');
+-- INSERT INTO `fiasdb`.`federal_district` (federal_district_id, federal_district_name, federal_district_short_name) VALUES (9, 'Крымский федеральный округ', 'Крымский ФО');
 
 CREATE TABLE IF NOT EXISTS `fiasdb`.`federal_district_region` (
   `federal_district_region_district_id` INT NOT NULL,
@@ -439,7 +440,6 @@ COMMENT = 'Промежуточная таблица связи федераль
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (1, 71); -- центр
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (1, 76); -- центр
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (1, 77); -- центр
---
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (2, 10); -- Северо-Западный
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (2, 11); -- Северо-Западный
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (2, 29); -- Северо-Западный
@@ -450,16 +450,15 @@ COMMENT = 'Промежуточная таблица связи федераль
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (2, 53); -- Северо-Западный
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (2, 60); -- Северо-Западный
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (2, 78); -- Северо-Западный
---
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (3, 1); -- Южный
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (3, 8); -- Южный
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (3, 23); -- Южный
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (3, 30); -- Южный
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (3, 34); -- Южный
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (3, 61); -- Южный
--- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (3, 91); -- Южный
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (9, 91); -- Крымский
+-- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (9, 92); -- Крымский
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (3, 99); -- Южный
---
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (4, 5); -- Северо-Кавказский
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (4, 6); -- Северо-Кавказский
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (4, 7); -- Северо-Кавказский
@@ -468,7 +467,6 @@ COMMENT = 'Промежуточная таблица связи федераль
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (4, 20); -- Северо-Кавказский
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (4, 26); -- Северо-Кавказский
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (4, 83); -- Северо-Кавказский
---
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (5, 2); -- Приволжский
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (5, 12); -- Приволжский
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (5, 13); -- Приволжский
@@ -483,15 +481,12 @@ COMMENT = 'Промежуточная таблица связи федераль
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (5, 63); -- Приволжский
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (5, 64); -- Приволжский
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (5, 73); -- Приволжский
--- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (5, 81); -- Приволжский
---
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (6, 45); -- Уральский
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (6, 66); -- Уральский
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (6, 72); -- Уральский
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (6, 74); -- Уральский
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (6, 86); -- Уральский
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (6, 89); -- Уральский
---
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (7, 3); -- Сибирский
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (7, 4); -- Сибирский
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (7, 17); -- Сибирский
@@ -504,11 +499,6 @@ COMMENT = 'Промежуточная таблица связи федераль
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (7, 55); -- Сибирский
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (7, 70); -- Сибирский
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (7, 75); -- Сибирский
--- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (7, 80); -- Сибирский
--- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (7, 84); -- Сибирский
--- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (7, 85); -- Сибирский
--- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (7, 88); -- Сибирский
---
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (8, 14); -- Дальневосточный
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (8, 25); -- Дальневосточный
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (8, 27); -- Дальневосточный
@@ -517,10 +507,102 @@ COMMENT = 'Промежуточная таблица связи федераль
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (8, 49); -- Дальневосточный
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (8, 65); -- Дальневосточный
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (8, 79); -- Дальневосточный
--- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (8, 82); -- Дальневосточный
 -- INSERT INTO `fiasdb`.`federal_district_region` (federal_district_region_district_id, federal_district_region_region_id) VALUES (8, 87); -- Дальневосточный
 
+CREATE TABLE IF NOT EXISTS `fiasdb`.`address_object_type_order` (
+  `address_object_type_order_id` INT NOT NULL AUTO_INCREMENT,
+  `address_object_type_order_guid` VARCHAR(36) NOT NULL COMMENT 'Внешний ключ на address_object',
+  `address_object_type_order_order` TINYINT NOT NULL COMMENT 'Положение типа объекта (начало - 0, конец - 1, нет - 3)',
+  `address_object_type_order_type` VARCHAR(31) NOT NULL COMMENT 'Тип адресного объекта',
+  PRIMARY KEY (`address_object_type_order_id`))
+ENGINE = InnoDB
+COMMENT = 'Типы адресных объектов';
 
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('639efe9d-3fc8-4438-8e70-ec4f2321f2a7', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('f5807226-8be0-4ea8-91fc-39d053aec1e2', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('b8837188-39ee-4ff9-bc91-fcc9ed451bb3', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('b756fe6b-bbd3-44d5-9302-5bfcc740f46e', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('0824434f-4098-4467-af72-d4f702fed335', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('18133adf-90c2-438e-88c4-62c41656de70', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('15784a67-8cea-425b-834a-6afe0e3ed61c', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('ee594d5e-30a9-40dc-b9f2-0add1be44ba1', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('1490490e-49c5-421c-9572-5673ba5d80c8', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('29251dcf-00a1-4e34-98d4-5c47484a36d4', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('5e465691-de23-4c4e-9f46-f35a125b5970', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('963073ee-4dfc-48bd-9a70-d2dfc6bd1f31', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('e8502180-6d08-431b-83ea-c7038f0df905', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('a9a71961-9363-44ba-91b5-ddf0463aebc2', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('61723327-1c20-42fe-8dfa-402638d9b396', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('d028ec4f-f6da-4843-ada6-b68b3e0efa3d', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('a84b2ef4-db03-474b-b552-6229e801ae9b', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('0c5b2444-70a0-4932-980c-b4dc0d3f02b5', 0, 'г.');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('248d8071-06e1-425e-a1cf-d1ff4c4a14a8', 0, 'Республика');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('c20180d9-ad9c-46d1-9eff-d60bc424592a', 0, 'Республика');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('294277aa-e25d-428c-95ad-46719c4ddb44', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('ed36085a-b2f5-454f-b9a9-1c9a678ee618', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('90c7181e-724f-41b3-b6c6-bd3ec7ae3f30', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('6d1ebb35-70c6-4129-bd55-da3969658f5d', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('1c727518-c96a-4f34-9ae6-fd510da3be03', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('e5a84b81-8ea1-49e3-b3c4-0528651be129', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('f6e148a1-c9d0-4141-a608-93e3bd95e6c4', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('c2deb16a-0330-4f05-821f-1d09c93331e6', 0, 'г.');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('d8327a56-80de-4df2-815c-4f6ab1224c50', 0, 'Республика');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('491cde9d-9d76-4591-ab46-ea93c079e686', 0, 'Республика');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('d00e1013-16bd-4c09-b3d5-3cb09fc54bd8', 1, 'край');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('83009239-25cb-4561-af8e-7ee111b1cb73', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('da051ec8-da2e-4a66-b542-473b8d221ab4', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('f10763dc-63e3-48db-83e1-9c566fe3092b', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('0bb7fa19-736d-49cf-ad0e-9774c4dae09b', 0, 'Республика');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('b2d8cd20-cabc-4deb-afad-f3c4b4d55821', 0, 'Республика');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('1781f74e-be4a-4697-9c6b-493057c94818', 1, 'Республика');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('61b95807-388a-4cb1-9bee-889f7cf811c8', 0, 'Республика');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('de459e9c-2933-4923-83d1-9c64cfd7a817', 0, 'Республика');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('de67dc49-b9ba-48a3-a4cc-c2ebfeca6c5e', 1, 'Республика');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('327a060b-878c-4fb4-8dc4-d5595871a3d8', 1, 'край');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('89db3198-6803-4106-9463-cbf781eff0b8', 1, 'автономный округ');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('6f2cbfd8-692a-4ee4-9b16-067210bde3fc', 0, 'Республика');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('de2cbfdf-9662-44a4-a4a4-8ad237ae4a3e', 0, 'Республика');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('37a0c60a-9240-48b5-a87f-0d8c86cdb6e1', 0, 'Республика');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('0c089b04-099e-4e0e-955a-6bf1ce525f1a', 0, 'Республика');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('52618b9c-bcbb-47e7-8957-95c63f0b17cc', 1, 'Республика');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('878fc621-3708-46c7-a97f-5a13a4176b3e', 3, '');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('0b940b96-103f-4248-850c-26b6c7296728', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('88cd27e2-6a8a-4421-9718-719a28a0a088', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('8bcec9d6-05bc-4e53-b45c-ba0c6f3a5c44', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('c99e7924-0428-4107-a302-4fd7c0cca3ff', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('4f8b1a21-e4bb-422f-9087-d3cbf4bebc14', 1, 'край');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('df3d7359-afa9-4aaa-8ff9-197e73906b1c', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('df594e0e-a935-4664-9d26-0bae13f904fe', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('fee76045-fe22-43a4-ad58-ad99e903bd58', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('4a3d970f-520e-46b9-b16c-50d4ca7535a8', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('92b30014-4d52-4e2e-892d-928142b924bf', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('54049357-326d-4b8f-b224-3c6dc25d6dd3', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('27eb7c10-a234-44da-a59c-8b1f864966de', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('d66e5325-3a25-4d29-ba86-4ca351d9704b', 3, '');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('826fa834-3ee8-404f-bdbc-13a5221cfb6e', 1, 'автономный округ');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('a84ebed3-153d-4ba9-8532-8bdf879e1f5a', 0, 'Республика');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('5c48611f-5de6-4771-9695-7e36a4e7529d', 0, 'Республика');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('026bc56f-3731-48e9-8245-655331f596c0', 0, 'Республика');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('8d3f1d35-f0f4-41b5-b5b7-e7cadf3e7bd7', 0, 'Республика');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('8276c6a1-1a86-4f0d-8920-aba34d4cc34a', 1, 'край');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('db9c4f8b-b706-40e2-b2b4-d31b98dcd3d1', 1, 'край');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('6466c988-7ce3-45e5-8b97-90ae16cb1249', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('393aeccb-89ef-4a7e-ae42-08d5cebc2e30', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('1ac46b49-3209-4814-b7bf-a509ea1aecd9', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('05426864-466d-41a3-82c4-11e61cdc98ce', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('889b1f3a-98aa-40fc-9d3d-0f41192758ab', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('b6ba5716-eb48-401b-8443-b197c9578734', 1, 'край');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('c225d3db-1db6-4063-ace0-b3fe9ea3805f', 0, 'Республика');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('43909681-d6e1-432d-b61f-ddac393cb5da', 1, 'край');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('7d468b39-1afa-41ec-8c4f-97a8603cb3d4', 1, 'край');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('844a80d6-5e31-4017-b422-4d9c01e9942c', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('d02f30fc-83bf-4c0f-ac2b-5729a866a207', 1, 'край');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('9c05e812-8679-4710-b8cb-5e8bd43cdf48', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('aea6280f-4648-460f-b8be-c2bc18923191', 1, 'область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('1b507b09-48c9-434f-bf6f-65066211c73e', 1, 'автономная область');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('f136159b-404a-4f1f-8d8d-d169e1374d5c', 1, 'автономный округ');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('bd8e6511-e4b9-4841-90de-6bbc231a789e', 0, 'Республика');
+INSERT INTO `fiasdb`.`address_object_type_order` (address_object_type_order_guid, address_object_type_order_order, address_object_type_order_type) VALUES ('6fdecb78-893a-4e3f-a5ba-aa062459463b', 0, 'г.');
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
