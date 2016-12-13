@@ -112,6 +112,8 @@ DROP INDEX `nd_normdoc_id_idx` ON `fiasdb`.`norm_doc`;
 
 -- address_object table
 DROP INDEX `ao_guid_idx` ON `fiasdb`.`address_object`;
+DROP INDEX `ao_level_idx` ON `fiasdb`.`address_object`;
+DROP INDEX `ao_actual_status_idx` ON `fiasdb`.`address_object`;
 DROP INDEX `ao_region_code_idx` ON `fiasdb`.`address_object`;
 DROP INDEX `ao_parent_guid_idx` ON `fiasdb`.`address_object`;
 DROP INDEX `ao_next_id_idx` ON `fiasdb`.`address_object`;

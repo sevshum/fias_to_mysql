@@ -47,6 +47,8 @@ CREATE INDEX `nd_normdoc_id_idx` ON `fiasdb`.`norm_doc` (`norm_doc_normdoc_id` A
 
 -- address_object table
 CREATE INDEX `ao_guid_idx` ON `fiasdb`.`address_object` (`address_object_guid` ASC);
+CREATE INDEX `ao_level_idx` ON `fiasdb`.`address_object` (`address_object_level` ASC);
+CREATE INDEX `ao_actual_status_idx` ON `fiasdb`.`address_object` (`address_object_actual_status` ASC);
 CREATE INDEX `ao_parent_guid_idx` ON `fiasdb`.`address_object` (`address_object_parent_guid` ASC);
 CREATE INDEX `ao_next_id_idx` ON `fiasdb`.`address_object` (`address_object_next_id` ASC);
 CREATE INDEX `ao_prev_id_idx` ON `fiasdb`.`address_object` (`address_object_prev_id` ASC);
