@@ -130,6 +130,7 @@ CREATE TABLE IF NOT EXISTS `fiasdb`.`address_object` (
   `address_object_operation_status` SMALLINT NOT NULL DEFAULT 20 COMMENT 'Статус действия над записью – причина появления записи.',
   `address_object_place_code` TINYINT NOT NULL DEFAULT 0 COMMENT 'Код населённого пункта',
   `address_object_plain_code` BIGINT NULL DEFAULT NULL COMMENT 'Код адресного объекта из КЛАДР 4.0 одной строкой без признака актуальности (последних двух',
+  `address_object_plan_code` VARCHAR(4) NULL DEFAULT NULL COMMENT 'Код элемента планировочной структуры',
   `address_object_postal_code` INT NULL DEFAULT NULL COMMENT 'Почтовый индекс',
   `address_object_region_code` TINYINT NOT NULL DEFAULT 0 COMMENT 'Код региона',
   `address_object_type_shortname` VARCHAR(10) CHARACTER SET 'utf8' NOT NULL COMMENT 'Краткое наименование типа объекта',

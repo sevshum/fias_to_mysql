@@ -87,6 +87,7 @@ $daddrobj = [
     'PARENTGUID' => 'address_object_parent_guid',
     'PLACECODE' => 'address_object_place_code',
     'PLAINCODE' => 'address_object_plain_code',
+    'PLANCODE' => 'address_object_plan_code',
     'POSTALCODE' => 'address_object_postal_code',
     'PREVID' => 'address_object_prev_id',
     'REGIONCODE' => 'address_object_region_code',
