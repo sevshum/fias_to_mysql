@@ -506,7 +506,7 @@ return [
             'rowsArray' => $normdoc
         ],
         'AS_DEL_NORMDOC' => [
-            'name' => 'donorm_doc',
+            'name' => 'norm_doc',
             'pk_id' => true,
             'del_where_col' => 'NORMDOCID',
             'auxiliary' => false,
