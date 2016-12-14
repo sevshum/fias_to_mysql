@@ -76,9 +76,9 @@ BEGIN
 	SELECT address_object_level, address_object_parent_guid, CONCAT(address_object_type_shortname, '. ', address_object_formal_name)  INTO ao_level, parent_id, text_tmp FROM address_object WHERE address_object_actual_status = 1 AND address_object_guid = id COLLATE utf8_general_ci LIMIT 1;
 	SET text_out = text_tmp;
 
- IF lev > 0 THEN
+ IF lev >= 1 THEN
 	WHILE ao_level > lev DO
-		SELECT address_object_level, address_object_parent_guid, CONCAT(address_object_type_shortname, '. ', address_object_formal_name) INTO ao_level, parent_id, text_tmp FROM address_object WHERE address_object_actual_status = 1 AND address_object_guid = parent_id COLLATE utf8_general_ci;
+		SELECT address_object_level, address_object_parent_guid, CONCAT(address_object_type_shortname, '. ', address_object_formal_name) INTO ao_level, parent_id, text_tmp FROM address_object WHERE address_object_actual_status = 1 AND address_object_guid = parent_id COLLATE utf8_general_ci LIMIT 1;
         if (ao_level >= lev) THEN
 	    	SET text_out = CONCAT(text_tmp, ', ' , text_out);
          END IF;
