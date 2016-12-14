@@ -45,6 +45,7 @@ $addrobj = [
     'NEXTID' => 'address_object_next_id',
     'CODE' => 'address_object_code',
     'PLAINCODE' => 'address_object_plain_code',
+    'PLANCODE' => 'address_object_plan_code',
     'ACTSTATUS' => 'address_object_actual_status',
     'LIVESTATUS' => 'address_object_livestatus',
     'CENTSTATUS' => 'address_object_center_status',
