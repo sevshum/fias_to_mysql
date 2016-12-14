@@ -330,7 +330,7 @@ return [
         'DHOUSINT' => [
             'name' => 'house_interval',
             'pk_id' => true,
-            'del_where_col' => 'INTGUID',
+            'del_where_col' => 'HOUSEINTID',
             'auxiliary' => false,
             'rowsArray' => $dhouseint
         ],
@@ -480,7 +480,7 @@ return [
         'AS_DEL_HOUSEINT' => [
             'name' => 'house_interval',
             'pk_id' => true,
-            'del_where_col' => 'INTGUID',
+            'del_where_col' => 'HOUSEINTID',
             'auxiliary' => false,
             'rowsArray' => $dhouseint
         ],

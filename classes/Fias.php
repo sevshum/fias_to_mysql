@@ -192,6 +192,13 @@ class Fias
             if (!$this->deleteSqlIndexes()) {
                 return false;
             }
+            $files = scandir($deltaOutputDir . 'delete/');
+            foreach ($files as $file) {
+                if (strtolower(substr($file, -4, 4)) === '.sql') {
+//                $this->execQueryFile($deltaOutputDir . $file);
+                    $this->execSqlFile($deltaOutputDir . 'delete/' . $file);
+                }
+            }
             $files = scandir($deltaOutputDir);
 //            $this->execSql($this->conf['truncateSql']);
             foreach ($files as $file) {
@@ -200,13 +207,7 @@ class Fias
                     $this->execSqlFile($deltaOutputDir . $file);
                 }
             }
-            $files = scandir($deltaOutputDir . 'delete/');
-            foreach ($files as $file) {
-                if (strtolower(substr($file, -4, 4)) === '.sql') {
-//                $this->execQueryFile($deltaOutputDir . $file);
-                    $this->execSqlFile($deltaOutputDir . 'delete/' . $file);
-                }
-            }
+
             $this->createSqlIndexes();
             $this->setNewDate();
         } else {
