@@ -1,5 +1,6 @@
 
 Parse FIAS Database and Delta from DBF or XML files.
+To parse main DB files first download them from https://fias.nalog.ru/Updates.aspx
 
 DIRECTORY STRUCTURE
 -------------------
