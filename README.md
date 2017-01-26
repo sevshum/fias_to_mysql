@@ -1,4 +1,6 @@
 
+Parse FIAS Database and Delta from DBF or XML files.
+
 DIRECTORY STRUCTURE
 -------------------
 
